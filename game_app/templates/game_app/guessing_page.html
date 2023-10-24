@@ -8,7 +8,18 @@
 <!-- {{ puzzle.name }} -->
 {{ puzzle.description }}
 <!-- {{puzzle.hidden_word}} -->
+<br>
+{% if not puzzle.masked_word  %}
+<form method="post">
+       {% csrf_token %}
+       <button type="submit">Start guessing!</button>
+   </form>
 
 </div>
+{% else %}
+{{ puzzle.masked_word }}
+{% endif  %}
+
+
 
 {% endblock %}
