@@ -4,22 +4,16 @@
 <h2>Here is the description of the word you need to guess:</h2>
 <div class="container">
 
-
-<!-- {{ puzzle.name }} -->
-{{ puzzle.description }}
-<!-- {{puzzle.hidden_word}} -->
-<br>
-{% if not puzzle.masked_word  %}
-<form method="post">
-       {% csrf_token %}
-       <button type="submit">Start guessing!</button>
-   </form>
-
-</div>
-{% else %}
-{{ puzzle.masked_word }}
-{% endif  %}
-
-
+  <!-- {{ puzzle.name }} -->
+  {{ puzzle.description }}
+  <!-- {{puzzle.hidden_word}} -->
+  <br>
+  {{ puzzle.masked_word }}
+  <br>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  {# Display the form fields as paragraphs, adjust as needed #}
+    <button type="submit">Submit</button>
+  </form>
 
 {% endblock %}

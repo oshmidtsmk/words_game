@@ -1,11 +1,7 @@
-#game_app
 from django import forms
+from .models import Word
 
-class LetterForm(forms.Form):
-    letter = forms.CharField()
-    number = forms.IntegerField(
-        label = "Select Number",
-        min_value = 1,
-        max_value =10
-        )
-    # Add more fields as needed
+class LetterForm(forms.ModelForm):
+    class Meta:
+        model = Word
+        fields = ['number_of_letter', 'letter']

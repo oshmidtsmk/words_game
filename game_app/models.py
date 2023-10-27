@@ -8,6 +8,8 @@ class Word(models.Model):
     word = models.TextField()
     description = models.TextField()
     masked_word = models.CharField(max_length=100, blank=True, null=True)
+    number_of_letter = models.IntegerField(null=True, blank=True)
+    letter = models.CharField(max_length=1, blank=True, null=True)
 
     def __str__(self):
         return self.word
@@ -29,5 +31,5 @@ class Word(models.Model):
         # Convert the list back to a string
         self.hidden_string = "".join(self.chars)
 
-        self.masked_word = self.hidden_string 
+        self.masked_word = self.hidden_string
         self.save()
