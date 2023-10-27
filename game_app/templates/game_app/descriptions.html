@@ -6,8 +6,11 @@
     <h1>Choose the word to guess: </h1>
     <ul>
         {% for puzzle in descriptions %}
+            <!-- {{puzzle.description}} -->
             <!-- <li>{{ item.description }}</li> -->
-            <li><a href="{% url 'game_app:guessing_page' puzzle.pk %}">{{ puzzle.description }}</a></li>
+             <a href="{% url 'game_app:masking-word' puzzle.pk %}">{{puzzle.description}}</a>
+             <br>
+            <!-- <li><a href="{% url 'game_app:guessing_page' puzzle.pk %}">{{ puzzle.description }}</a></li> -->
         {% endfor %}
     </ul>
   </div>

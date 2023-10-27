@@ -9,5 +9,6 @@ app_name = 'game_app'
 
 urlpatterns = [
     path('descriptions/', views.DescriptionList.as_view(), name = 'game'),
+    path('descriptions/<int:pk>/masking-word/', views.masking_word, name='masking-word'),
     path('descriptions/<int:pk>/', views.GuessingPage.as_view(), name = 'guessing_page'),
 ]
