@@ -45,6 +45,10 @@ class Word(models.Model):
 
     def process_reply(self):
         if self.word[self.number_of_letter -1] == self.letter:
+            temp_list = list(self.masked_word)
+            temp_list[self.number_of_letter -1] = self.letter
+            self.masked_word = "".join(temp_list)
+            print(self.masked_word)
             return self.success
         else:
             return self.failure
