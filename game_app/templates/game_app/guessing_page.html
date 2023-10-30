@@ -8,6 +8,8 @@
   {{ puzzle.description }}
   <!-- {{puzzle.hidden_word}} -->
   <br>
+  {{ puzzle.process_reply }}
+  <br>
   {{ puzzle.masked_word }}
   <br>
   <form method="post">
@@ -16,6 +18,5 @@
     <button type="submit">Submit</button>
   </form>
 
-<br>
-{{ puzzle.process_reply }}
+
 {% endblock %}

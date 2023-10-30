@@ -19,6 +19,11 @@ class Word(models.Model):
         default="Try again..."
         )
 
+    call_to_action = models.CharField(
+        max_length=100,  # Adjust the max_length as needed
+        default="Ok make your choise now!"
+        )
+
 
     def __str__(self):
         return self.word
@@ -44,11 +49,16 @@ class Word(models.Model):
         self.save()
 
     def process_reply(self):
-        if self.word[self.number_of_letter -1] == self.letter:
-            temp_list = list(self.masked_word)
-            temp_list[self.number_of_letter -1] = self.letter
-            self.masked_word = "".join(temp_list)
-            print(self.masked_word)
-            return self.success
+        if self.number_of_letter and self.letter:
+            if self.word[self.number_of_letter -1] == self.letter:
+                temp_list = list(self.masked_word)
+                temp_list[self.number_of_letter -1] = self.letter
+                self.masked_word = "".join(temp_list)
+                print(self.masked_word)
+                self.save()
+                return self.success
+            else:
+                return self.failure        
         else:
-            return self.failure
+            if not self.number_of_letter and not self.letter:
+                return self.call_to_action
