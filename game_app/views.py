@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.views import generic
 from .models import Word
@@ -25,10 +26,20 @@ class GuessingPage(generic.DetailView):
         context['form'] = LetterForm(instance=self.object)
         return context
 
-    # def post(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     instance.process_and_save()
-    #     return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': instance.pk}))
+    # def get(self, request, *args, **kwargs):
+    #     # Retrieve the instance of the model
+    #     self.object = self.get_object()
+    #
+    #     # Add your condition here
+    #     if self.object.number_of_attempts < 0:  # Replace with your condition
+    #         # Redirect to another page
+    #         #return redirect('game_app:game_over')  # Replace with the name of the view to redirect to
+    #         return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': self.object.pk}))
+    #
+    #     # If the condition is not met, continue with the default behavior
+    #     context = self.get_context_data(object=self.object)
+    #     return self.render_to_response(context)
+
 
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
@@ -36,10 +47,22 @@ class GuessingPage(generic.DetailView):
         if form.is_valid():
             form.save()
             #return redirect('game_app:guessing_page', pk=obj.pk)
-            return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
+            if obj.number_of_attempts < 0:
+                return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': obj.pk}))
+            else:
+                return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
         else:
             # Handle form errors if needed
             return self.render_to_response(self.get_context_data(form=form))
+
+class GameOver(generic.DetailView):
+    model = Word
+    template_name = 'game_app/game_over.html'
+
+
+# class YouWin(generic.DetailView):
+#     model = Word
+#     template_name = 'game_app/you_win.html'
 
 
 

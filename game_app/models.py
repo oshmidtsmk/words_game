@@ -24,6 +24,9 @@ class Word(models.Model):
         default="Ok make your choise now!"
         )
 
+    number_of_attempts = models.IntegerField(default=3)
+    #game_over = models.BooleanField(default=True)
+
 
     def __str__(self):
         return self.word
@@ -57,8 +60,12 @@ class Word(models.Model):
                 print(self.masked_word)
                 self.save()
                 return self.success
+            #if self.number_of_attempts < 0:
+                #some reset loic here
             else:
-                return self.failure        
+                self.number_of_attempts -= 1
+                self.save()
+                return self.failure
         else:
             if not self.number_of_letter and not self.letter:
                 return self.call_to_action
