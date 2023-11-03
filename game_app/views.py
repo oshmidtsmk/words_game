@@ -26,19 +26,8 @@ class GuessingPage(generic.DetailView):
         context['form'] = LetterForm(instance=self.object)
         return context
 
-    # def get(self, request, *args, **kwargs):
-    #     # Retrieve the instance of the model
-    #     self.object = self.get_object()
-    #
-    #     # Add your condition here
-    #     if self.object.number_of_attempts < 0:  # Replace with your condition
-    #         # Redirect to another page
-    #         #return redirect('game_app:game_over')  # Replace with the name of the view to redirect to
-    #         return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': self.object.pk}))
-    #
-    #     # If the condition is not met, continue with the default behavior
-    #     context = self.get_context_data(object=self.object)
-    #     return self.render_to_response(context)
+
+
 
 
     def post(self, request, *args, **kwargs):
@@ -46,23 +35,34 @@ class GuessingPage(generic.DetailView):
         form = LetterForm(request.POST, instance= obj)
         if form.is_valid():
             form.save()
-            #return redirect('game_app:guessing_page', pk=obj.pk)
-            if obj.number_of_attempts < 0:
-                return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': obj.pk}))
+            print(obj.process_reply())
+            if obj.process_reply() == obj.you_win:
+                return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': obj.pk}))
             else:
                 return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
+            # return self.win_lose()
         else:
             # Handle form errors if needed
             return self.render_to_response(self.get_context_data(form=form))
 
-class GameOver(generic.DetailView):
-    model = Word
-    template_name = 'game_app/game_over.html'
+    # def win_lose(self):
+    #     obj = self.get_object()
+    #     if obj.masked_word == obj.word:
+    #         print(obj.masked_word)
+    #         return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': obj.pk}))
+    #     else:
+    #         return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
 
 
-# class YouWin(generic.DetailView):
+
+# class GameOver(generic.DetailView):
 #     model = Word
-#     template_name = 'game_app/you_win.html'
+#     template_name = 'game_app/game_over.html'
+#
+#
+class YouWin(generic.DetailView):
+    model = Word
+    template_name = 'game_app/you_win.html'
 
 
 

@@ -26,7 +26,11 @@ class Word(models.Model):
 
     number_of_attempts = models.IntegerField(default=3)
     #game_over = models.BooleanField(default=True)
+    you_win = models.CharField(
+        max_length=100,  # Adjust the max_length as needed
+        default="Congrats! You have GUESSED IT!!!!"
 
+)
 
     def __str__(self):
         return self.word
@@ -57,11 +61,14 @@ class Word(models.Model):
                 temp_list = list(self.masked_word)
                 temp_list[self.number_of_letter -1] = self.letter
                 self.masked_word = "".join(temp_list)
-                print(self.masked_word)
                 self.save()
-                return self.success
+                if self.word == self.masked_word:
+                    return self.you_win
+                else:
+                    return self.success
             #if self.number_of_attempts < 0:
                 #some reset loic here
+
             else:
                 self.number_of_attempts -= 1
                 self.save()

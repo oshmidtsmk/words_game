@@ -1,24 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Here is the description of the word you need to guess:</h2>
-<div class="container">
+{% if puzzle.masked_word == puzzle.word %}
+  <h1>You win!</h1>
 
-  <!-- {{ puzzle.name }} -->
-  {{ puzzle.description }}
-  <!-- {{puzzle.hidden_word}} -->
-  <br>
-  {{ puzzle.process_reply }}
-  <br>
-  Number of number_of_attempts: {{puzzle.number_of_attempts }}
-  <br>
-  {{ puzzle.masked_word }}
-  <br>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}  {# Display the form fields as paragraphs, adjust as needed #}
-    <button type="submit">Submit</button>
-  </form>
+{% else %}
 
+  <h2>Here is the description of the word you need to guess:</h2>
+  <div class="container">
+
+    <!-- {{ puzzle.name }} -->
+    {{ puzzle.description }}
+    <!-- {{puzzle.hidden_word}} -->
+    <br>
+    {{ puzzle.process_reply }}
+    <br>
+    Number of number_of_attempts: {{puzzle.number_of_attempts }}
+    <br>
+    {{ puzzle.masked_word }}
+    <br>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}  {# Display the form fields as paragraphs, adjust as needed #}
+      <button type="submit">Submit</button>
+    </form>
+{% endif %}
 
 {% endblock %}
