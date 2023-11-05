@@ -70,20 +70,22 @@ class Word(models.Model):
                     return self.you_win
                 else:
                     return self.success
-            #if self.number_of_attempts < 0:
-                #some reset loic here
+
+            # else:
+            #     if self.number_of_attempts > 0:
+            #         self.number_of_attempts -= 1
+            #         self.save()
+            #         return self.failure
+            #     else:
+            #         return self.game_over
+
+
             elif self.number_of_attempts == 1:
+                #self.number_of_attempts = 0
+                #self.save()
                 return self.game_over
             else:
                 return self.failure
-
-            # elif self.word[self.number_of_letter -1] != self.letter:
-            #     self.number_of_attempts -= 1
-            #     if self.number_of_attempts == 0:
-            #         return self.game_over
-            #     else:
-            #         self.save()
-            #         return self.failure
         else:
             if not self.number_of_letter and not self.letter:
                 #self.save()

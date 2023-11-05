@@ -37,6 +37,14 @@ class GuessingPage(generic.DetailView):
             form.save()
             print(obj.process_reply())
 
+            # if obj.process_reply() == obj.you_win:
+            #     return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': obj.pk}))
+            #
+            # elif obj.process_reply() == obj.failure:
+            #     return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
+            # elif obj.process_reply() == obj.game_over:
+            #     return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': obj.pk}))
+            #
 
             if obj.process_reply() == obj.you_win:
                 return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': obj.pk}))
@@ -46,12 +54,12 @@ class GuessingPage(generic.DetailView):
                 obj.save()
                 return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
             elif obj.process_reply() == obj.game_over:
+                obj.number_of_attempts = 0
+                obj.save()
                 return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': obj.pk}))
-
-            #if obj.process_reply() == obj.failure:
             else:
                 return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
-            # return self.win_lose()
+
         else:
             # Handle form errors if needed
             return self.render_to_response(self.get_context_data(form=form))
