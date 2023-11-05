@@ -29,7 +29,11 @@ class Word(models.Model):
     you_win = models.CharField(
         max_length=100,  # Adjust the max_length as needed
         default="Congrats! You have GUESSED IT!!!!"
+)
 
+    game_over = models.CharField(
+        max_length=100,  # Adjust the max_length as needed
+        default="Game Over. Try again!"
 )
 
     def __str__(self):
@@ -68,11 +72,19 @@ class Word(models.Model):
                     return self.success
             #if self.number_of_attempts < 0:
                 #some reset loic here
-
+            elif self.number_of_attempts == 1:
+                return self.game_over
             else:
-                self.number_of_attempts -= 1
-                self.save()
                 return self.failure
+
+            # elif self.word[self.number_of_letter -1] != self.letter:
+            #     self.number_of_attempts -= 1
+            #     if self.number_of_attempts == 0:
+            #         return self.game_over
+            #     else:
+            #         self.save()
+            #         return self.failure
         else:
             if not self.number_of_letter and not self.letter:
+                #self.save()
                 return self.call_to_action

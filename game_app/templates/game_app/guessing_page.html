@@ -1,10 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if puzzle.masked_word == puzzle.word %}
-  <h1>You win!</h1>
 
-{% else %}
 
   <h2>Here is the description of the word you need to guess:</h2>
   <div class="container">
@@ -24,6 +21,6 @@
       {{ form.as_p }}  {# Display the form fields as paragraphs, adjust as needed #}
       <button type="submit">Submit</button>
     </form>
-{% endif %}
+
 
 {% endblock %}

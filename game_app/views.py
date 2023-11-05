@@ -36,8 +36,19 @@ class GuessingPage(generic.DetailView):
         if form.is_valid():
             form.save()
             print(obj.process_reply())
+
+
             if obj.process_reply() == obj.you_win:
                 return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': obj.pk}))
+
+            elif obj.process_reply() == obj.failure:
+                obj.number_of_attempts -= 1
+                obj.save()
+                return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
+            elif obj.process_reply() == obj.game_over:
+                return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': obj.pk}))
+
+            #if obj.process_reply() == obj.failure:
             else:
                 return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
             # return self.win_lose()
@@ -55,9 +66,9 @@ class GuessingPage(generic.DetailView):
 
 
 
-# class GameOver(generic.DetailView):
-#     model = Word
-#     template_name = 'game_app/game_over.html'
+class GameOver(generic.DetailView):
+    model = Word
+    template_name = 'game_app/game_over.html'
 #
 #
 class YouWin(generic.DetailView):
