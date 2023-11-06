@@ -54,7 +54,9 @@ class GuessingPage(generic.DetailView):
                 obj.save()
                 return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
             elif obj.process_reply() == obj.game_over:
-                obj.number_of_attempts = 0
+                obj.number_of_attempts = 3
+                obj.number_of_letter = None
+                obj.letter = None
                 obj.save()
                 return HttpResponseRedirect(reverse('game_app:game_over', kwargs={'pk': obj.pk}))
             else:
