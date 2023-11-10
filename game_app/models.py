@@ -3,6 +3,8 @@ from django.db import models
 from django.conf import settings
 import random
 
+
+
 # Create your models here.
 class Word(models.Model):
     word = models.TextField()
@@ -35,6 +37,8 @@ class Word(models.Model):
         max_length=100,  # Adjust the max_length as needed
         default="Game Over. Try again!"
 )
+
+    guessed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.word

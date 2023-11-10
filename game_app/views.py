@@ -35,7 +35,7 @@ class GuessingPage(generic.DetailView):
         form = LetterForm(request.POST, instance= obj)
         if form.is_valid():
             form.save()
-            print(obj.process_reply())
+            #print(obj.process_reply())
 
             # if obj.process_reply() == obj.you_win:
             #     return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': obj.pk}))
@@ -47,6 +47,8 @@ class GuessingPage(generic.DetailView):
             #
 
             if obj.process_reply() == obj.you_win:
+                obj.guessed = True
+                obj.save()
                 return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': obj.pk}))
 
             elif obj.process_reply() == obj.failure:

@@ -8,9 +8,15 @@
         {% for puzzle in descriptions %}
             <!-- {{puzzle.description}} -->
             <!-- <li>{{ item.description }}</li> -->
+            {% if puzzle.guessed %}
+              <p>{{puzzle.word}}(You guessed it!)</p>
+              <br>
+
+            {% else %}
              <a href="{% url 'game_app:masking-word' puzzle.pk %}">{{puzzle.description}}</a>
              <br>
             <!-- <li><a href="{% url 'game_app:guessing_page' puzzle.pk %}">{{ puzzle.description }}</a></li> -->
+            {% endif %}
         {% endfor %}
     </ul>
   </div>
