@@ -29,11 +29,14 @@
     			<div class="container">
 
             <a class="navbar-brand mynav" href="{% url 'home' %}">Головна сторінка</a>
-          
+
 
     					<ul class="nav navbar-nav navbar-right">
     						{% if user.is_authenticated %}
-                      <li><a href="{% url 'accounts:logout' %}" class="btn btn-simple">Вийти</a></li> -->
+                      <li><a href="{% url 'accounts:logout' %}" class="btn btn-simple">Вийти</a></li>
+                      <li><a href="{% url 'game_app:game' %}" class="btn btn-simple">До слів!</a></li>
+
+
     						{% else %}
 
     						      <li><a href="{% url 'accounts:login' %}" class="btn btn-simple">Авторизуватись</a></li>

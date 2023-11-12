@@ -3,15 +3,11 @@ from django.db import models
 from django.conf import settings
 import random
 
-
-
 # Create your models here.
 class Word(models.Model):
+    #Defaul feilds for each user
     word = models.TextField()
     description = models.TextField()
-    masked_word = models.CharField(max_length=100, blank=True, null=True)
-    number_of_letter = models.IntegerField(null=True, blank=True)
-    letter = models.CharField(max_length=1, blank=True, null=True)
     success = models.CharField(
         max_length=100,  # Adjust the max_length as needed
         default="You have guessed it!"
@@ -25,9 +21,6 @@ class Word(models.Model):
         max_length=100,  # Adjust the max_length as needed
         default="Ok make your choise now!"
         )
-
-    number_of_attempts = models.IntegerField(default=3)
-    #game_over = models.BooleanField(default=True)
     you_win = models.CharField(
         max_length=100,  # Adjust the max_length as needed
         default="Congrats! You have GUESSED IT!!!!"
@@ -37,6 +30,13 @@ class Word(models.Model):
         max_length=100,  # Adjust the max_length as needed
         default="Game Over. Try again!"
 )
+
+    #Fields uniques for each user
+    masked_word = models.CharField(max_length=100, blank=True, null=True)
+    number_of_letter = models.IntegerField(null=True, blank=True)
+    letter = models.CharField(max_length=1, blank=True, null=True)
+
+    number_of_attempts = models.IntegerField(default=3)
 
     guessed = models.BooleanField(default=False)
 
