@@ -39,7 +39,7 @@ class Word(models.Model):
     number_of_letter = models.IntegerField(null=True, blank=True)
     letter = models.CharField(max_length=1, blank=True, null=True)
 
-    number_of_attempts = models.IntegerField(default=3)
+    #number_of_attempts = models.IntegerField(default=3)
 
     guessed = models.BooleanField(default=False)
 
@@ -78,15 +78,6 @@ class Word(models.Model):
                 else:
                     return self.success
 
-            # else:
-            #     if self.number_of_attempts > 0:
-            #         self.number_of_attempts -= 1
-            #         self.save()
-            #         return self.failure
-            #     else:
-            #         return self.game_over
-
-
             elif self.number_of_attempts == 1:
                 #self.number_of_attempts = 0
                 #self.save()
@@ -100,8 +91,12 @@ class Word(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE, null = True, blank = True)
     number_of_attempts_to_guess = models.IntegerField(default=3)
+    ######
+    # masked_word = models.CharField(max_length=100, blank=True, null=True)
+    # number_of_letter = models.IntegerField(null=True, blank=True)
+    # letter = models.CharField(max_length=1, blank=True, null=True)
 
 
 #Creating a user profile when the user is registered
