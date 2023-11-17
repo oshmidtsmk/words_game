@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     #added apps:
     'accounts',
     'game_app',
+    # 'game_app.apps.GameConfig'
 ]
 
 MIDDLEWARE = [
