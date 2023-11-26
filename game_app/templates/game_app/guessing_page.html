@@ -3,7 +3,7 @@
 
 
 
-  <h2>Here is the description of the word you need to guess:</h2>
+  <h2>Here is the description of the word you need to guess {{user.username}}:</h2>
   <div class="container">
 
     <!-- {{ puzzle.name }} -->
@@ -12,7 +12,7 @@
     <br>
     {{ puzzle.process_reply }}
     <br>
-    Number of number_of_attempts: {{puzzle.number_of_attempts }}
+    Number of number of attempts: {{user.profile.number_of_attempts_to_guess }}
     <br>
     {{ puzzle.masked_word }}
     <br>

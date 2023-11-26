@@ -3,7 +3,19 @@
 
 
 
-  <h1>Hello {{gamer.user.username}} !</h1>
+  <h1>Hello {{user.username}} !</h1>
+  <br>
+  Number of attempts you have: {{user.profile.number_of_attempts_to_guess}}
+
+  <br>
+  Choose words to guess:
+  <br>
+
+  {{words_list}}
+  {% for word in words_list %}
+     <li>{{ word.description }}</li>
+   {% endfor %}
+
 
 
 {% endblock %}

@@ -3,34 +3,38 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.views import generic
 from .models import Word, Profile
+from django.contrib.auth.models import User
 from .forms import LetterForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .game_play import Puzzle
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 
 # Create your views here.
 
-class DescriptionList(generic.ListView):
-    model = Word
-    template_name = 'game_app/descriptions.html'  # Create an HTML template to display the list of groups
-    context_object_name = 'descriptions'
+# class DescriptionList(generic.ListView):
+#     model = Word
+#     template_name = 'game_app/descriptions.html'  # Create an HTML template to display the list of groups
+#     context_object_name = 'descriptions'
+
+class UserWords(generic.DetailView):
+    """
+    Words to guess for the current user
+    """
+    model = Profile
+    template_name = 'game_app/user_words.html'  # Create an HTML template to display the list of groups
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['words'] = Word.objects.all()
+        return context
 
 
-# class UserProfile(LoginRequiredMixin, generic.DetailView):
-#     model = Profile
-#     template_name = 'game_app/profile.html'
-#     context_object_name = 'gamer'
-#
-#     def get_object(self, queryset=None):
-#         obj, created = UserGame.objects.get_or_create(user=self.request.user)
-#         return obj
-    # def get_object(self, queryset=None):
-    #     # Retrieve the PlayerInfo for the authenticated user
-    #     return UserGame.objects.get(user=self.request.user)
 
-
-class GuessingPage(generic.DetailView):
+class GuessingPage(LoginRequiredMixin, generic.DetailView):
     model = Word
     template_name = 'game_app/guessing_page.html'  # Create an HTML template to display the group details
     context_object_name = 'puzzle'
@@ -38,6 +42,10 @@ class GuessingPage(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = LetterForm(instance=self.object)
+        # user_profile = User.objects.get(user=self.request.user)
+        #
+        # # Add the user profile to the context
+        # context['user_profile'] = user_profile
         return context
 
 

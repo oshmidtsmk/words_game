@@ -5,8 +5,10 @@ import random
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save #each time when it will be saving somethign to db, we will have a hook to do something.
 from django.dispatch import receiver
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+
 class Word(models.Model):
     #Defaul feilds for each user
     word = models.TextField()
@@ -38,9 +40,8 @@ class Word(models.Model):
     masked_word = models.CharField(max_length=100, blank=True, null=True)
     number_of_letter = models.IntegerField(null=True, blank=True)
     letter = models.CharField(max_length=1, blank=True, null=True)
-
-    #number_of_attempts = models.IntegerField(default=3)
-
+    #user = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
+    #profile = models.ForeignKey(Profile, related_name="words",on_delete=models.CASCADE,null=True, blank=True)
     guessed = models.BooleanField(default=False)
 
     def __str__(self):
@@ -79,8 +80,7 @@ class Word(models.Model):
                     return self.success
 
             elif self.number_of_attempts == 1:
-                #self.number_of_attempts = 0
-                #self.save()
+
                 return self.game_over
             else:
                 return self.failure
@@ -89,14 +89,14 @@ class Word(models.Model):
                 #self.save()
                 return self.call_to_action
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE, null = True, blank = True)
     number_of_attempts_to_guess = models.IntegerField(default=3)
-    ######
-    # masked_word = models.CharField(max_length=100, blank=True, null=True)
-    # number_of_letter = models.IntegerField(null=True, blank=True)
-    # letter = models.CharField(max_length=1, blank=True, null=True)
+    
+
+    def __str__(self):
+        return self.user.username
 
 
 #Creating a user profile when the user is registered

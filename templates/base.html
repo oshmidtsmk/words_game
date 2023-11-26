@@ -34,8 +34,10 @@
     					<ul class="nav navbar-nav navbar-right">
     						{% if user.is_authenticated %}
                       <li><a href="{% url 'accounts:logout' %}" class="btn btn-simple">Вийти</a></li>
-                      <li><a href="{% url 'game_app:game' %}" class="btn btn-simple">До слів!</a></li>
-                      <li><a href="{% url 'game_app:profile' %}" class="btn btn-simple">Профіль!</a></li>
+
+                      <li><a href="{% url 'game_app:user_profile_detail' user.profile.pk %}" class="btn btn-simple">Профіль</a></li>
+
+
 
 
 
