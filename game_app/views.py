@@ -11,6 +11,8 @@ from .game_play import Puzzle
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
+import random
+
 
 # Create your views here.
 
@@ -96,9 +98,30 @@ class YouWin(generic.DetailView):
 
 def masking_word(request, pk):
     obj = Word.objects.get(pk=pk)
+    user = request.user
+
+    # Add your custom logic here
+    obj.chars = list(obj.word)
+    length = len(obj.chars)
+    # Determine the number of letters to hide (you can adjust this as needed)
+    num_letters_to_hide = int(length * 0.5)  # Hiding 30% of the letters
+
+    # Generate random indices to hide letters
+    obj.indices_to_hide = random.sample(range(length), num_letters_to_hide)
+
+    # Replace the letters at the random indices with the placeholder
+    for index in obj.indices_to_hide:
+        obj.chars[index] = "*"
+
+    # Convert the list back to a string
+    obj.hidden_string = "".join(obj.chars)
+
+    user.profile.masked_word = obj.hidden_string
+    user.profile.save()
 
 
-    obj.process_and_save()  # Replace with the actual method name
+
+    # obj.process_and_save(profile)  # Replace with the actual method name
 
 
     return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
