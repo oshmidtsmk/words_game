@@ -61,12 +61,11 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                     if word_obj.word == profile_obj.masked_word:
                         return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': word_obj.pk}))
                     else:
-                        return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+                        return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
                 else:
-                    profile_obj.number_of_attempts_to_guess -=1
+                    profile_obj.number_of_attempts -=1
                     profile_obj.save()
-                    return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
-                    if profile_obj.number_of_attempts_to_guess == 0:
+                    if profile_obj.number_of_attempts == 0:
                         profile_obj.number_of_attempts = 3
                         profile_obj.number_of_letter = None
                         profile_obj.letter = None
@@ -74,8 +73,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                         return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                     else:
                         return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
+
 
 
 
