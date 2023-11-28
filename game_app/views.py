@@ -16,11 +16,6 @@ import random
 
 # Create your views here.
 
-# class DescriptionList(generic.ListView):
-#     model = Word
-#     template_name = 'game_app/descriptions.html'  # Create an HTML template to display the list of groups
-#     context_object_name = 'descriptions'
-
 class UserWords(generic.DetailView):
     """
     Words to guess for the current user
@@ -44,10 +39,6 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = LetterForm(instance=self.object)
-        # user_profile = User.objects.get(user=self.request.user)
-        #
-        # # Add the user profile to the context
-        # context['user_profile'] = user_profile
         return context
 
 
@@ -118,10 +109,6 @@ def masking_word(request, pk):
 
     user.profile.masked_word = obj.hidden_string
     user.profile.save()
-
-
-
-    # obj.process_and_save(profile)  # Replace with the actual method name
 
 
     return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))

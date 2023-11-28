@@ -45,40 +45,14 @@ class Word(models.Model):
         default="Game Over. Try again!"
 )
 
-    #Fields uniques for each user
-    #profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
-    #masked_word = models.CharField(max_length=100, blank=True, null=True)
     number_of_letter = models.IntegerField(null=True, blank=True)
     letter = models.CharField(max_length=1, blank=True, null=True)
-    #user = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
-    #profile = models.ForeignKey(Profile, related_name="words",on_delete=models.CASCADE,null=True, blank=True)
+
     guessed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.word
 
-    # def process_and_save(self, profile):
-    #     # Add your custom logic here
-    #     self.chars = list(self.word)
-    #     length = len(self.chars)
-    #     # Determine the number of letters to hide (you can adjust this as needed)
-    #     num_letters_to_hide = int(length * 0.5)  # Hiding 30% of the letters
-    #
-    #     # Generate random indices to hide letters
-    #     self.indices_to_hide = random.sample(range(length), num_letters_to_hide)
-    #
-    #     # Replace the letters at the random indices with the placeholder
-    #     for index in self.indices_to_hide:
-    #         self.chars[index] = "*"
-    #
-    #     # Convert the list back to a string
-    #     self.hidden_string = "".join(self.chars)
-    #
-    #     profile.masked_word = self.hidden_string
-    #     profile.save()
-        # profile = Profile()
-        # profile.masked_word = self.hidden_string
-        # profile.save()
 
     def process_reply(self):
         if self.number_of_letter and self.letter:
@@ -101,9 +75,6 @@ class Word(models.Model):
             if not self.number_of_letter and not self.letter:
                 #self.save()
                 return self.call_to_action
-
-
-
 
 
 #Creating a user profile when the user is registered
