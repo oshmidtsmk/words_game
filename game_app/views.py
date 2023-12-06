@@ -41,9 +41,6 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
         context['form'] = LetterForm(instance=self.object)
         return context
 
-
-
-
     def post(self, request, *args, **kwargs):
         #obj = self.get_object() ##
         word_obj = self.get_object()
@@ -59,7 +56,8 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                     profile_obj.masked_word = "".join(temp_list)
                     profile_obj.save()
                     if word_obj.word == profile_obj.masked_word:
-                        return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': word_obj.pk}))
+                        #return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': word_obj.pk}))
+                        return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                     else:
                         return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                 else:
@@ -84,7 +82,7 @@ class GameOver(generic.DetailView):
     template_name = 'game_app/game_over.html'
 #
 #
-class YouWin(generic.DetailView):
+class YouWin(LoginRequiredMixin, generic.DetailView):
     model = Word
     template_name = 'game_app/you_win.html'
 

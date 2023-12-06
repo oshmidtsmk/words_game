@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 
-
-
+{% if puzzle.word == user.profile.masked_word %}
+<h1>You win!</h1>
+<p>the word you had to guess is {{puzzle.word}}</p>
+  {%elif user.profile.number_of_attempts_to_guess == 0 %}
+    <h1>Game over :(</h1>
+  {%else%}
   <h2>Here is the description of the word you need to guess {{user.username}}:</h2>
   <div class="container">
 
@@ -21,6 +25,8 @@
       {{ form.as_p }}  {# Display the form fields as paragraphs, adjust as needed #}
       <button type="submit">Submit</button>
     </form>
+{% endif %}
+
 
 
 {% endblock %}
