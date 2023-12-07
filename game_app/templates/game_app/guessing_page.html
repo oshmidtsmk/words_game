@@ -4,8 +4,10 @@
 {% if puzzle.word == user.profile.masked_word %}
 <h1>You win!</h1>
 <p>the word you had to guess is {{puzzle.word}}</p>
+<li><a href="{% url 'game_app:user_profile_detail' user.profile.pk %}" class="btn btn-simple">Продовжити відгадування нових слів?</a></li>
   {%elif user.profile.number_of_attempts_to_guess == 0 %}
     <h1>Game over :(</h1>
+    <a href="{% url 'game_app:new-game' puzzle.pk %}">New game?</a>
   {%else%}
   <h2>Here is the description of the word you need to guess {{user.username}}:</h2>
   <div class="container">
@@ -13,9 +15,13 @@
     <!-- {{ puzzle.name }} -->
     {{ puzzle.description }}
     <!-- {{puzzle.hidden_word}} -->
+    {% if condition_string %}
     <br>
-    {{ puzzle.process_reply }}
+    {{ condition_string }}
     <br>
+    {% else %}
+    <p>Make first choice!</p>
+    {% endif %}
     Number of number of attempts: {{user.profile.number_of_attempts_to_guess }}
     <br>
     {{ user.profile.masked_word }}

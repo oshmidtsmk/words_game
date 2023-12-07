@@ -39,6 +39,11 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = LetterForm(instance=self.object)
+         # Retrieve 'your_string' from the query parameters
+        condition_string = self.request.GET.get('condition_string', None)
+
+        # Add 'your_string' to the context
+        context['condition_string'] = condition_string
         return context
 
     def post(self, request, *args, **kwargs):
@@ -59,19 +64,22 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                         #return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': word_obj.pk}))
                         return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                     else:
-                        return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+                        condition_string = "You have quessed it!"
+                        redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                        return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+                        #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                 else:
                     profile_obj.number_of_attempts_to_guess -=1
                     profile_obj.save()
-                    return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
-                    if profile_obj.number_of_attempts_to_guess == 0:
-                        profile_obj.number_of_attempts = 3
-                        profile_obj.number_of_letter = None
-                        profile_obj.letter = None
-                        profile_obj.save()
-                        return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
-                    else:
-                        return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+                    condition_string = "No:("
+                    redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                    return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+                    #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+            else:
+                condition_string = "Plase make your choice"
+                redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+                return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
         else:
             return self.render_to_response(self.get_context_data(form=form))
 
@@ -86,6 +94,16 @@ class YouWin(LoginRequiredMixin, generic.DetailView):
     model = Word
     template_name = 'game_app/you_win.html'
 
+
+def new_game(request, pk):
+    word_obj = Word.objects.get(pk=pk)
+    profile_obj = request.user.profile
+    profile_obj.number_of_attempts_to_guess = 3
+    profile_obj.number_of_letter = None
+    profile_obj.letter = None
+    profile_obj.save()
+    #return HttpResponseRedirect(reverse('game_app:user_words', kwargs={'pk': word_obj.pk}))
+    return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
 
 
 
