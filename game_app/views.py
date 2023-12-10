@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.views import generic
-from .models import Word, Profile
+from .models import Word, Profile, GuessedWords
 from django.contrib.auth.models import User
 from .forms import LetterForm
 from django.http import HttpResponseRedirect
@@ -61,7 +61,12 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                     profile_obj.masked_word = "".join(temp_list)
                     profile_obj.save()
                     if word_obj.word == profile_obj.masked_word:
-                        #return HttpResponseRedirect(reverse('game_app:you_win', kwargs={'pk': word_obj.pk}))
+                        guessed_word_instance = GuessedWords.objects.create(
+                            profile = profile_obj,
+                            guessed_word = word_obj.word
+                        )
+                        
+
                         return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                     else:
                         condition_string = "You have quessed it!"

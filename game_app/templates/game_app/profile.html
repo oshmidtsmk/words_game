@@ -16,6 +16,10 @@
      <li>{{ word.description }}</li>
    {% endfor %}
 
+<h1>And here is the words you have guessed dear friend:</h1>
+{% for word in user.profile.guessed_words.all %}}
+  {{word.guessed_word}}
 
+{% endfor %}
 
 {% endblock %}

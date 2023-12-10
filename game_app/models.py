@@ -15,10 +15,24 @@ class Profile(models.Model):
     masked_word = models.CharField(max_length=100, blank=True, null=True)
     number_of_letter = models.IntegerField(null=True, blank=True)
     letter = models.CharField(max_length=1, blank=True, null=True)
+    #guessed_word = models.ForeignKey(GuessedWords, on_delete=models.CASCADE, blank=True, null=True)
 
 
     def __str__(self):
         return self.user.username
+
+
+class GuessedWords(models.Model):
+    #word = models.CharField(max_length=100, blank=True, null=True)
+    profile = models.ForeignKey(Profile,related_name="guessed_words", on_delete=models.CASCADE, blank=True, null=True)
+    guessed_word = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.guessed_word
+
+
+
+
 
 class Word(models.Model):
     #Defaul feilds for each user
@@ -32,10 +46,23 @@ class Word(models.Model):
 
 
 
+
+
 #Creating a user profile when the user is registered
 def create_profile(sender, instance, created, **kwargs):
     if created:
         user_profile = Profile(user = instance)
         user_profile.save()
 
+
 post_save.connect(create_profile, sender = User)
+
+
+
+# def create_guessed_words(sender, instance, created, **kwargs):
+#     if created:
+#         guessed_words = GuessedWords(profile = instance)
+#         guessed_words.save()
+
+
+#post_save.connect(create_guessed_words, sender = Profile)
