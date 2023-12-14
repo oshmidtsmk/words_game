@@ -12,17 +12,25 @@
      Words to guess are:
      <br>
      <br>
+     <ul class="list-group">
      {% for puzzle in words %}
        {% if puzzle.word in guessed_words %}
-       {{puzzle.description}} - (Guessed) <br>
+
+
+         <li class="list-group-item list-group-item disabled ">{{puzzle.description}} - (Guessed)</li>
+
        {% else %}
 
-     <a href="{% url 'game_app:masking-word' puzzle.pk %}">{{puzzle.description}}</a>
-     <br>
+       <!-- <button type="button" class="list-group-item" href="{% url 'game_app:masking-word' puzzle.pk %}" >{{puzzle.description}} -->
+       <a href="{% url 'game_app:masking-word' puzzle.pk %}" class="list-group-item">{{puzzle.description}}</a>
+
+     <!-- <a href="{% url 'game_app:masking-word' puzzle.pk %}">{{puzzle.description}}</a> -->
+     <!-- <br> -->
       {% endif %}
       {% endfor %}
+       </ul>
   </div>
-  
+
 </div>
 
 {% endblock %}
