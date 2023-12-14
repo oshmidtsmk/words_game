@@ -27,6 +27,16 @@ class UserWords(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['words'] = Word.objects.all()
+        user = self.request.user
+        context['user'] = user
+
+        guessed_words = []
+        for item in user.profile.guessed_words.all():
+            item = str(item)
+            guessed_words.append(item)
+
+        context['guessed_words'] = guessed_words
+
         return context
 
 
@@ -41,6 +51,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
         context['form'] = LetterForm(instance=self.object)
          # Retrieve 'your_string' from the query parameters
         condition_string = self.request.GET.get('condition_string', None)
+        profile_obj = self.request.user.profile
 
         # Add 'your_string' to the context
         context['condition_string'] = condition_string
@@ -65,7 +76,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                             profile = profile_obj,
                             guessed_word = word_obj.word
                         )
-                        
+
 
                         return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                     else:

@@ -5,24 +5,24 @@
   <div class="row">
      <h1>Hello {{ user.username }}</h1>
      <br>
+
+     <br>
      Number of attempts you have is: {{ user.profile.number_of_attempts_to_guess }}
      <br>
      Words to guess are:
      <br>
      <br>
      {% for puzzle in words %}
+       {% if puzzle.word in guessed_words %}
+       {{puzzle.description}} - (Guessed) <br>
+       {% else %}
+
      <a href="{% url 'game_app:masking-word' puzzle.pk %}">{{puzzle.description}}</a>
      <br>
-       <br>
-
+      {% endif %}
       {% endfor %}
   </div>
-  <h1>And here is the words you have guessed dear friend:</h1>
-  {% for word in user.profile.guessed_words.all %}
-    {{word.guessed_word}}
-    <br>
-
-  {% endfor %}
+  
 </div>
 
 {% endblock %}
