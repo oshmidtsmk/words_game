@@ -9,19 +9,29 @@
     <h1>Game over :(</h1>
     <a href="{% url 'game_app:new-game' puzzle.pk %}">New game?</a>
   {%else%}
-  <h2>Here is the description of the word you need to guess {{user.username}}:</h2>
+  <div class="page-header">
+  <h1> {{ user.username }}, <small> Нижче орис слова для відгадування. Вибери у полях нижче номер букви та саму букву</small></h1>
+</div>
   <div class="container">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <strong>Опис:</strong>
+        {{ puzzle.description }}
+      </div>
+    </div>
 
-    <!-- {{ puzzle.name }} -->
-    {{ puzzle.description }}
-    <!-- {{puzzle.hidden_word}} -->
-    {% if condition_string %}
-    <br>
-    {{ condition_string }}
-    <br>
+{% if condition_string %}
+    {% if condition_string == 'You have quessed it!' %}
+          <div class="alert alert-success" role="alert">{{ condition_string }} </div>
     {% else %}
-    <p>Make first choice!</p>
+          <div class="alert alert-warning" role="alert">{{ condition_string }} </div>
+        {endif}
+
     {% endif %}
+    {%else%}
+    <strong>Зроби свій вибір!</strong> <br>
+    {% endif %}
+    <br>
     Number of number of attempts: {{user.profile.number_of_attempts_to_guess }}
     <br>
     {{ user.profile.masked_word }}
@@ -32,7 +42,5 @@
       <button type="submit">Submit</button>
     </form>
 {% endif %}
-
-
 
 {% endblock %}
