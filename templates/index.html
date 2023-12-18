@@ -5,17 +5,17 @@
 
 {% if user.is_authenticated %}
 <div class="jumbotron">
-  <h1>Вітаю,  {{user.username}} ;)</h1>
-  <p>Ну що, поїхали?</p>
+  <h1>Вітаю,  {{user.username}} !</h1>
+  <p>Тепер ти маєш доступ до слів які можеш відгадувати! Ну що, поїхали?</p>
   <p><a class="btn btn-primary btn-lg" href="{% url 'game_app:user_profile_detail' user.profile.pk %}" role="button">Вперед до відгадувань!</a></p>
 </div>
 
 {% else %}
 
 <div class="jumbotron">
-  <h1>Привіт, ерудите ;)</h1>
-  <p>На цьому сайті ти можеш попрактикуватися у відгадуванні слів</p>
-  <p>Будь ласка авторизуйся, це хвилину</p>
+  <h1>Привіт, ерудите!</h1>
+  <p>На цьому сайті ти можеш попрактикуватися у відгадуванні слів!</p>
+  <p>Будь ласка авторизуйся, це займе хвилину</p>
   <a class="btn btn-primary btn-lg" href="{% url 'accounts:login' %}" role="button">Авторизуватись</a> або
   <a class="btn btn-primary btn-lg" href="{% url 'accounts:signup' %}" role="button">Зареєструватись</a>
 </div>

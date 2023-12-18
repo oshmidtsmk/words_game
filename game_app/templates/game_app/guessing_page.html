@@ -2,45 +2,62 @@
 {% block content %}
 
 {% if puzzle.word == user.profile.masked_word %}
-<h1>You win!</h1>
-<p>the word you had to guess is {{puzzle.word}}</p>
+<h1>Це перемога!</h1>
+<p>Відгадане слово {{puzzle.word}}</p>
 <li><a href="{% url 'game_app:user_profile_detail' user.profile.pk %}" class="btn btn-simple">Продовжити відгадування нових слів?</a></li>
   {%elif user.profile.number_of_attempts_to_guess == 0 %}
-    <h1>Game over :(</h1>
-    <a href="{% url 'game_app:new-game' puzzle.pk %}">New game?</a>
+    <h1>Це нажаль програш :(</h1>
+    <a href="{% url 'game_app:new-game' puzzle.pk %}">Нова гра?</a>
   {%else%}
   <div class="page-header">
   <h1> {{ user.username }}, <small> Нижче орис слова для відгадування. Вибери у полях нижче номер букви та саму букву</small></h1>
 </div>
   <div class="container">
+    <!-- <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div> -->
     <div class="panel panel-default">
+      <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div>
       <div class="panel-body">
-        <strong>Опис:</strong>
+        <strong>Опис слова яке треба відгадати:</strong>
         {{ puzzle.description }}
       </div>
     </div>
 
 {% if condition_string %}
     {% if condition_string == 'You have quessed it!' %}
-          <div class="alert alert-success" role="alert">{{ condition_string }} </div>
+          <div class="alert alert-success" role="alert">{{ condition_string }} Зашифроване слово: <strong>{{ user.profile.masked_word }}</strong> </div>
     {% else %}
-          <div class="alert alert-warning" role="alert">{{ condition_string }} </div>
-        {endif}
+          <div class="alert alert-warning" role="alert">{{ condition_string }}Зашифроване слово: <strong>{{ user.profile.masked_word }}</strong> </div>
+    {% endif %}
+{%else%}
 
-    {% endif %}
-    {%else%}
-    <strong>Зроби свій вибір!</strong> <br>
-    {% endif %}
+      <div class="well"> Зашифроване слово: <strong>{{ user.profile.masked_word }}</strong> . Зроби свій вибір</div>
+      <!-- <div class="alert alert-info" role="alert"> Зроби свій вибір! </div> -->
+{% endif %}
+
     <br>
-    Number of number of attempts: {{user.profile.number_of_attempts_to_guess }}
-    <br>
-    {{ user.profile.masked_word }}
-    <br>
-    <form method="post">
+
+    <form method="post" >
       {% csrf_token %}
-      {{ form.as_p }}  {# Display the form fields as paragraphs, adjust as needed #}
-      <button type="submit">Submit</button>
-    </form>
+
+      <div class="form-group">
+        <label for="exampleInputEmail1">Номер літери</label>
+          <div class="form-group">
+          {{ form.number_of_letter}}
+
+          </div>
+      </div>
+      <label for="exampleInputEmail1">Літера</label>
+      <div class="form-group">
+          {{ form.letter}}
+
+          </div>
+          <button type="submit" class="btn btn-primary">Відгадати</button>
+      </div>
+
+
+  </form >
+
+
 {% endif %}
 
 {% endblock %}
