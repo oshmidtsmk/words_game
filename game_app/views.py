@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 from .forms import LetterForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .game_play import Puzzle
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
@@ -100,15 +99,6 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-
-class GameOver(generic.DetailView):
-    model = Word
-    template_name = 'game_app/game_over.html'
-#
-#
-class YouWin(LoginRequiredMixin, generic.DetailView):
-    model = Word
-    template_name = 'game_app/you_win.html'
 
 
 def new_game(request, pk):

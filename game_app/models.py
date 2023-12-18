@@ -59,10 +59,4 @@ post_save.connect(create_profile, sender = User)
 
 
 
-# def create_guessed_words(sender, instance, created, **kwargs):
-#     if created:
-#         guessed_words = GuessedWords(profile = instance)
-#         guessed_words.save()
-
-
-#post_save.connect(create_guessed_words, sender = Profile)
+#
