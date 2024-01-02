@@ -15,20 +15,54 @@ import random
 
 # Create your views here.
 
-class UserWords(generic.DetailView):
-    """
-    Words to guess for the current user
-    """
-    model = Profile
-    template_name = 'game_app/user_words.html'  # Create an HTML template to display the list of groups
-    context_object_name = 'profile'
+# class UserWords(generic.DetailView):
+#     """
+#     Words to guess for the current user
+#     """
+#     model = Profile
+#     template_name = 'game_app/user_words.html'  # Create an HTML template to display the list of groups
+#     context_object_name = 'profile'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['words'] = Word.objects.all()
+#         user = self.request.user
+#         context['user'] = user
+#
+#         guessed_words = []
+#         for item in user.profile.guessed_words.all():
+#             item = str(item)
+#             guessed_words.append(item)
+#
+#         context['guessed_words'] = guessed_words
+#
+#         return context
+
+
+class CategoryListView(generic.ListView):
+    model = Word
+    template_name = 'game_app/category_list.html'
+    context_object_name = 'categories'
+    queryset = Word.objects.values('category').distinct() # to show only one the same category without duplicates.
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['words'] = Word.objects.all()
         user = self.request.user
         context['user'] = user
+        return context
 
+class WordListView(generic.ListView):
+    model = Word
+    template_name = 'game_app/word_list.html'
+    context_object_name = 'words'
+
+    def get_queryset(self):
+        return Word.objects.filter(category=self.kwargs['category'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['user'] = user
         guessed_words = []
         for item in user.profile.guessed_words.all():
             item = str(item)
@@ -39,11 +73,10 @@ class UserWords(generic.DetailView):
         return context
 
 
-
 class GuessingPage(LoginRequiredMixin, generic.DetailView):
     model = Word
     template_name = 'game_app/guessing_page.html'  # Create an HTML template to display the group details
-    context_object_name = 'puzzle'
+    context_object_name = 'word'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,12 +141,13 @@ def new_game(request, pk):
     profile_obj.number_of_letter = None
     profile_obj.letter = None
     profile_obj.save()
-    #return HttpResponseRedirect(reverse('game_app:user_words', kwargs={'pk': word_obj.pk}))
+
     return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+    # return HttpResponseRedirect(reverse('game_app:guessing_page', args=[pk]))
 
 
 
-def masking_word(request, pk):
+def masking_word(request,category, pk):
     obj = Word.objects.get(pk=pk)
     user = request.user
 
@@ -136,5 +170,5 @@ def masking_word(request, pk):
     user.profile.masked_word = obj.hidden_string
     user.profile.save()
 
-
-    return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
+    return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
+    #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))

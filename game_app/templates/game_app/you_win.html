@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-
-<h1>You WIN!</h1>
-
-<p>The word you guessed is: {{word.word}}!</p>
-<a href="{% url 'game_app:game' %}">One more word to guess?</a>
-
-{% endblock %}

@@ -32,12 +32,11 @@ class GuessedWords(models.Model):
 
 
 
-
-
 class Word(models.Model):
     #Defaul feilds for each user
     word = models.TextField()
     description = models.TextField()
+    category = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.word

@@ -7,7 +7,7 @@
 <div class="jumbotron">
   <h1>Вітаю,  {{user.username}} !</h1>
   <p>Тепер ти маєш доступ до слів які можеш відгадувати! Ну що, поїхали?</p>
-  <p><a class="btn btn-primary btn-lg" href="{% url 'game_app:user_profile_detail' user.profile.pk %}" role="button">Вперед до відгадувань!</a></p>
+  <p><a class="btn btn-primary btn-lg" href="{% url 'game_app:category_list' %}" role="button">Вперед до відгадувань!</a></p>
 </div>
 
 {% else %}

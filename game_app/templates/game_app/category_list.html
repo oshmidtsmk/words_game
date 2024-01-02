@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+Hi {{user.username}}
+<ul>
+  {% for category in categories %}
+  <li><a href="{% url 'game_app:word_list' category=category.category %}">{{ category.category }}</a></li>
+      <!-- {{category.category}} -->
+
+    <br>
+  {% endfor %}
+</ul>
+
+
+
+{% endblock %}

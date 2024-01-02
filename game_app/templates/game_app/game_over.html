@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-
-<h1>This is game over dude!</h1>
-<!-- <a href="{% url 'game_app:game' %}">Try again?</a> -->
-
-<a href="{% url 'game_app:guessing_page' word.pk %}">Try again?</a>
-
-{% endblock %}
