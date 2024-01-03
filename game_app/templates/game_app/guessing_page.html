@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if puzzle.word == user.profile.masked_word %}
+{% if word.word == user.profile.masked_word %}
 <h1>Це перемога!</h1>
-<p>Відгадане слово {{puzzle.word}}</p>
-<li><a href="{% url 'game_app:user_profile_detail' user.profile.pk %}" class="btn btn-simple">Продовжити відгадування нових слів?</a></li>
+<p>Відгадане слово {{word.word}}</p>
+<li><a href="{% url 'game_app:category_list' %}" class="btn btn-simple">Продовжити відгадування нових слів?</a></li>
+
   {%elif user.profile.number_of_attempts_to_guess == 0 %}
     <h1>Це нажаль програш :(</h1>
-    <a href="{% url 'game_app:new-game' puzzle.pk %}">Нова гра?</a>
+    <a href="{% url 'game_app:new-game' word.pk %}">Нова гра?</a>
   {%else%}
   <div class="page-header">
   <h1> {{ user.username }}, <small> Нижче орис слова для відгадування. Вибери у полях нижче номер букви та саму букву</small></h1>
@@ -18,7 +19,7 @@
       <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div>
       <div class="panel-body">
         <strong>Опис слова яке треба відгадати:</strong>
-        {{ puzzle.description }}
+        {{ word.description }}
       </div>
     </div>
 

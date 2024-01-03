@@ -89,7 +89,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
         context['condition_string'] = condition_string
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request,category, pk, *args, **kwargs):
         #obj = self.get_object() ##
         word_obj = self.get_object()
         profile_obj = request.user.profile
@@ -110,22 +110,27 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                         )
 
 
-                        return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+                        #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+                        return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
                     else:
                         condition_string = "You have quessed it!"
-                        redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                        #redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                        redirect_url = reverse('game_app:guessing_page', args=[category, pk])
+
                         return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
                         #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
                 else:
                     profile_obj.number_of_attempts_to_guess -=1
                     profile_obj.save()
                     condition_string = "No:("
-                    redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                    #redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                    redirect_url = reverse('game_app:guessing_page', args=[category, pk])
                     return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
                     #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
             else:
                 condition_string = "Plase make your choice"
-                redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                #redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                redirect_url = reverse('game_app:guessing_page', args=[category, pk])
                 return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
                 return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
         else:
