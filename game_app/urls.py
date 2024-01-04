@@ -12,6 +12,6 @@ urlpatterns = [
     path('categories/<str:category>/<int:pk>/masking-word/', views.masking_word, name='masking-word'),
     path('categories/<str:category>/', views.WordListView.as_view(), name='word_list'),
     path('categories/<str:category>/<int:pk>/', views.GuessingPage.as_view(), name='guessing_page'),
-    path('descriptions/<int:pk>/new-game/', views.new_game, name='new-game'),
+    path('categories/<str:category>/<int:pk>/new-game/', views.new_game, name='new-game'),
 
 ]

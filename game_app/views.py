@@ -139,7 +139,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
 
 
 
-def new_game(request, pk):
+def new_game(request,category, pk):
     word_obj = Word.objects.get(pk=pk)
     profile_obj = request.user.profile
     profile_obj.number_of_attempts_to_guess = 3
@@ -147,8 +147,9 @@ def new_game(request, pk):
     profile_obj.letter = None
     profile_obj.save()
 
-    return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
-    # return HttpResponseRedirect(reverse('game_app:guessing_page', args=[pk]))
+    #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+    return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
+
 
 
 
