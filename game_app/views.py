@@ -15,30 +15,6 @@ import random
 
 # Create your views here.
 
-# class UserWords(generic.DetailView):
-#     """
-#     Words to guess for the current user
-#     """
-#     model = Profile
-#     template_name = 'game_app/user_words.html'  # Create an HTML template to display the list of groups
-#     context_object_name = 'profile'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['words'] = Word.objects.all()
-#         user = self.request.user
-#         context['user'] = user
-#
-#         guessed_words = []
-#         for item in user.profile.guessed_words.all():
-#             item = str(item)
-#             guessed_words.append(item)
-#
-#         context['guessed_words'] = guessed_words
-#
-#         return context
-
-
 class CategoryListView(generic.ListView):
     model = Word
     template_name = 'game_app/category_list.html'
@@ -57,12 +33,15 @@ class WordListView(generic.ListView):
     context_object_name = 'words'
 
     def get_queryset(self):
-        return Word.objects.filter(category=self.kwargs['category'])
+        return Word.objects.filter(category=self.kwargs['category']) #this category is passed from html by click.
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['user'] = user
+        context['category'] = self.kwargs['category']
+
+        #here I am just making a list out of the queriset to work with it in html of words_list
         guessed_words = []
         for item in user.profile.guessed_words.all():
             item = str(item)
@@ -176,5 +155,4 @@ def masking_word(request,category, pk):
     user.profile.masked_word = obj.hidden_string
     user.profile.save()
 
-    return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
-    #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': obj.pk}))
+    return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))# category and pk args are passed from html

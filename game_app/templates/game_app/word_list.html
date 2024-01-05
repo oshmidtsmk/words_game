@@ -5,7 +5,7 @@
   <div class="row">
 
     <div class="page-header">
-  <h1> Отже, {{ user.username }} <small>Вибирай слово, яке хочеш розгадати</small></h1>
+  <h1> Отже, {{ user.username }} <small>Вибирай слово, яке хочеш розгадати. <h1>Категорія {{category}}</h1></small></h1>
   <!-- <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div> -->
   <!-- <small>Вибирай слово, яке хочеш розгадати</small> -->
 </div>
@@ -15,7 +15,7 @@
        {% if word.word in guessed_words %}
 
 
-         <li class="list-group-item list-group-item disabled ">{{word.description}} - (Guessed)</li>
+         <li class="list-group-item list-group-item disabled ">{{word.description}} - (Вже відгадане слово)</li>
 
        {% else %}
 

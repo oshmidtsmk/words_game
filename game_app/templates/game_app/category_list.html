@@ -1,15 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-Hi {{user.username}}
-<ul>
-  {% for category in categories %}
-  <li><a href="{% url 'game_app:word_list' category=category.category %}">{{ category.category }}</a></li>
-      <!-- {{category.category}} -->
 
-    <br>
-  {% endfor %}
-</ul>
+<div class="container">
+  <div class="row">
+
+    <div class="page-header">
+  <h1> Отже, {{ user.username }} <small>Вибери категорію слів для відгадувань</small></h1>
+  <!-- <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div> -->
+  <!-- <small>Вибирай слово, яке хочеш розгадати</small> -->
+</div>
+  <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div>
+     <ul class="list-group">
+       {% for category in categories %}
 
 
+       <a href="{% url 'game_app:word_list' category=category.category %}" class="list-group-item">{{category.category}}</a>
+
+
+
+      {% endfor %}
+       </ul>
+  </div>
+
+</div>
 
 {% endblock %}
