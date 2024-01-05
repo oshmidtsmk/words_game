@@ -11,7 +11,7 @@
     <a href="{% url 'game_app:new-game' category=word.category pk=word.pk %}">Нова гра?</a>
   {%else%}
   <div class="page-header">
-  <h1> {{ user.username }}, <small> Нижче орис слова для відгадування. Вибери у полях нижче номер букви та саму букву</small></h1>
+  <h1> {{ user.username }}, <small> Нижче опис слова для відгадування. Вибери у полях нижче номер букви та саму букву. <h1>Категорія {{word.category}}</h1></small></h1>
 </div>
   <div class="container">
     <!-- <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div> -->
