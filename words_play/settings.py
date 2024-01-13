@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     #added apps:
     'accounts',
     'game_app',
-    # 'game_app.apps.GameConfig'
+    # for FB:
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # FB
 ]
 
 ROOT_URLCONF = 'words_play.urls'
@@ -69,6 +71,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  #FB
+                'social_django.context_processors.login_redirect', #FB
             ],
         },
     },
@@ -76,9 +80,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'words_play.wsgi.application'
 
+#for FB
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.github.GithubOAuth2',
 
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+#for FB
+SOCIAL_AUTH_FACEBOOK_KEY = '351321751168467'
+SOCIAL_AUTH_FACEBOOK_SECRET = '3f3c7c91a63f73bcfc0b7fd311d51993' 
 
 DATABASES = {
     'default': {
@@ -127,6 +140,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS =  [BASE_DIR.joinpath("static")]
 
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 #this is needed for us to he redirected automatically to these pages after loging/logout
 LOGIN_REDIRECT_URL = "test"
 LOGOUT_REDIRECT_URL = "thanks"

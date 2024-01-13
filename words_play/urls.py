@@ -28,5 +28,6 @@ urlpatterns = [
     path('welcome/', views.TestPage.as_view(), name = 'test'),
     path('thanks/', views.ThanksPage.as_view(), name = 'thanks'),
     path('game/', include('game_app.urls', namespace = 'game')),
+    path('oauth/', include('social_django.urls', namespace='social')),  #FB
 
 ]

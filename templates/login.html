@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Login Page</h1>
+  {% if user.is_authenticated %}
+    <p>Hello, {{ user.username }}! (<a href="{% url 'logout' %}">logout</a>)</p>
+  {% else %}
+    <p>Please <a href="{% url 'social:begin' 'facebook' %}">login with Facebook</a>.</p>
+  {% endif %}
+{% endblock %}
