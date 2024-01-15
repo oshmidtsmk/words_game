@@ -3,6 +3,20 @@
 from django.db import migrations, models
 
 
+
+def load_data_from_json(apps, schema_editor):
+    models.Word = apps.get_model('game_app', 'Word')
+
+    with open('words.json', 'r') as file:
+        data = json.load(file)
+
+    for item in data:
+        models.Word.objects.create(
+            word=item['word'],
+            description=item['description'],
+            category=item.get('category', None)
+        )
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,9 +24,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='word',
-            name='category',
-            field=models.TextField(blank=True, null=True),
-        ),
+        # migrations.AddField(
+        #     model_name='word',
+        #     name='category',
+        #     field=models.TextField(blank=True, null=True),
+        # ),
+        migrations.RunPython(load_data_from_json),
     ]
