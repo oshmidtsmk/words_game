@@ -37,18 +37,48 @@
 
     <br>
 
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-            {{ field }}
-        {% endfor %}
-        <button type="submit">Submit Guess</button>
-    </form>
+    <form method="post" >
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="exampleInputEmail1">Номер літери</label>
+          <div class="form-group">
+          {{ form.number_of_letter}}
+
+          </div>
+      </div>
+      <label for="exampleInputEmail1">Літера</label>
+      <div class="form-group">
+          {{ form.letter}}
+
+          </div>
+          <button type="submit" class="btn btn-primary">Відгадати</button>
+      </div>
+
+
+  </form >
+
 
 {% endif %}
 
 
+<h1>Alternative:</h1>
 
+<form method="post" >
+  {% csrf_token %}
+{%  for letter in user.profile.masked_word %}
+  {% if letter == "*" %}
+      {{form.letter}}
+  {% elif letter == " " %}
+      &nbsp;
+      &nbsp;
+  {% else %}
+    {{letter}}
+  {% endif %}
 
+{% endfor %}
+<p>
 
+<button type="submit" class="btn btn-primary">Відгадати</button>
+  </form >
 {% endblock %}

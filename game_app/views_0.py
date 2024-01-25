@@ -4,8 +4,7 @@ from django.views.generic import TemplateView
 from django.views import generic
 from .models import Word, Profile, GuessedWords
 from django.contrib.auth.models import User
-#from .forms import LetterForm
-from .forms import GuessForm
+from .forms import LetterForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -60,53 +59,62 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        user_profile = self.request.user.profile
-        masked_word = user_profile.masked_word
-
+        context['form'] = LetterForm(instance=self.object)
+         # Retrieve 'your_string' from the query parameters
         condition_string = self.request.GET.get('condition_string', None)
-        context['form'] = GuessForm(masked_word)
-        context['masked_word'] = masked_word
-        context['user_profile'] = self.request.user.profile
-        context['condition_string'] = condition_string
+        profile_obj = self.request.user.profile
 
+        # Add 'your_string' to the context
+        context['condition_string'] = condition_string
         return context
 
     def post(self, request,category, pk, *args, **kwargs):
+        #obj = self.get_object() ##
         word_obj = self.get_object()
-        user_profile = request.user.profile
-        masked_word_list = list(user_profile.masked_word)
-
-        form = GuessForm(user_profile.masked_word, request.POST)
-
+        profile_obj = request.user.profile
+        form = LetterForm(request.POST, instance= profile_obj)
         if form.is_valid():
-            for index,(guessed_letter, original_letter) in enumerate(zip(form.cleaned_data.values(), word_obj.word)):
-                if guessed_letter == original_letter:
-                    masked_word_list[index] = guessed_letter
-                    condition_string = "You have quessed it!"
-                    redirect_url = reverse('game_app:guessing_page', args=[category, pk])
-                    user_profile.masked_word = ''.join(masked_word_list)
-                    user_profile.save()
+            form.save()
 
-                    return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
-                if guessed_letter != original_letter and guessed_letter != '' :
-                    user_profile.number_of_attempts_to_guess -= 1
-                    user_profile.save()
+            if profile_obj.number_of_letter and profile_obj.letter:
+                if word_obj.word[profile_obj.number_of_letter -1] == profile_obj.letter:#not needed
+                    temp_list = list(profile_obj.masked_word)
+                    temp_list[profile_obj.number_of_letter -1] = profile_obj.letter #not needed
+                    profile_obj.masked_word = "".join(temp_list)
+                    profile_obj.save()
+                    if word_obj.word == profile_obj.masked_word:
+                        guessed_word_instance = GuessedWords.objects.create(
+                            profile = profile_obj,
+                            guessed_word = word_obj.word
+                        )
+
+
+                        #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+                        return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
+                    else:
+                        condition_string = "You have quessed it!"
+                        #redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                        redirect_url = reverse('game_app:guessing_page', args=[category, pk])
+
+                        return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+                        #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+                else:
+                    profile_obj.number_of_attempts_to_guess -=1
+                    profile_obj.save()
                     condition_string = "No:("
+                    #redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
                     redirect_url = reverse('game_app:guessing_page', args=[category, pk])
                     return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+                    #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+            else:
+                condition_string = "Plase make your choice"
+                #redirect_url = reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk})
+                redirect_url = reverse('game_app:guessing_page', args=[category, pk])
+                return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+                return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
 
-            user_profile.masked_word = ''.join(masked_word_list)
-            user_profile.save()
-
-        return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
-
-
-
-
-        #     return redirect('success_page')  # Redirect to a success page or any other appropriate view
-        #
-        # return self.render_to_response(self.get_context_data(form=form))
 
 
 

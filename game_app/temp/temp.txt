@@ -1,0 +1,109 @@
+# forms.py
+from django import forms
+
+class GuessForm(forms.Form):
+    def __init__(self, masked_word, guessed_letters, *args, **kwargs):
+        super(GuessForm, self).__init__(*args, **kwargs)
+
+        for letter in masked_word:
+            if letter == '*':
+                field_name = f'guessed_{len(self.fields) + 1}'  # Unique field name for each masked letter
+                self.fields[field_name] = forms.CharField(max_length=1, required=False, initial=guessed_letters.get(field_name, ''))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        guessed_letters = {key: cleaned_data[key] for key in cleaned_data if key.startswith('guessed_')}
+        return guessed_letters
+
+
+class GuessingPageDetailView(DetailView):
+    model = Word
+    template_name = 'guessing_page.html'
+    context_object_name = 'word_obj'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        user_profile = self.request.user.profile
+        masked_word = user_profile.masked_word
+        guessed_letters = {f'guessed_{i+1}': char for i, char in enumerate(masked_word) if char.isalpha()}
+
+        context['form'] = GuessForm(masked_word, guessed_letters)
+        context['masked_word'] = masked_word
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        word_obj = self.get_object()
+        user_profile = request.user.profile
+        masked_word_list = list(user_profile.masked_word)
+
+        form = GuessForm(user_profile.masked_word, request.POST)
+
+        if form.is_valid():
+            # Check if the guessed letters match the word
+            guessed_letters = form.cleaned_data
+            if ''.join(guessed_letters.values()) == word_obj.word:
+                # Update the masked word in the user's profile
+                user_profile.masked_word = word_obj.word
+                user_profile.save()
+
+        return redirect('guessing_page', pk=word_obj.pk)
+
+
+<!-- guessing_page.html -->
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        {{ field }}
+    {% endfor %}
+    <button type="submit">Submit Guess</button>
+</form>
+
+<p>Masked Word: {{ masked_word }}</p>
+
+
+
+
+
+
+#Old logic
+def post(self, request,category, pk, *args, **kwargs):
+    user_profile = self.request.user.profile
+    form = GuessForm(user_profile.masked_word,request.POST)
+    word_obj = self.get_object()
+
+    if form.is_valid():
+        print(form.cleaned_data)
+        guessed_letter = form.cleaned_data['letter'].lower()
+
+        # Check if the guessed letter is in the word
+        if guessed_letter in word_obj.word:
+            # Update the masked word in the user's profile
+            user_profile = request.user.profile
+            masked_word_list = list(user_profile.masked_word)
+
+            # Update masked word based on correct guesses
+            for i, letter in enumerate(word_obj.word):
+                if letter == guessed_letter:
+                    masked_word_list[i] = guessed_letter
+
+            user_profile.masked_word = ''.join(masked_word_list)
+            user_profile.save()
+
+
+            <form method="post">
+              {% csrf_token %}
+              {% for letter in user_profile.masked_word %}
+              {% if letter == "*" %}
+                {{form.letter}}
+              {% elif letter == " " %}
+                &nbsp;
+                &nbsp;
+          {% else %}
+              {{letter}}
+              {% endif %}
+
+          {% endfor %}
+            <button type="submit">Submit Guess</button>
+          </form>
