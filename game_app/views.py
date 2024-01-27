@@ -80,25 +80,39 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
         form = GuessForm(user_profile.masked_word, request.POST)
 
         if form.is_valid():
-            for index,(guessed_letter, original_letter) in enumerate(zip(form.cleaned_data.values(), word_obj.word)):
+            condition_strings = []  # List to store condition stringsґ
+            guessed_letters = []
+            missed_letters = []
+
+            for index, (guessed_letter, original_letter) in enumerate(zip(form.cleaned_data.values(), word_obj.word)):
                 if guessed_letter == original_letter:
                     masked_word_list[index] = guessed_letter
-                    condition_string = "You have quessed it!"
-                    redirect_url = reverse('game_app:guessing_page', args=[category, pk])
-                    user_profile.masked_word = ''.join(masked_word_list)
-                    user_profile.save()
-
-                    return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
-                if guessed_letter != original_letter and guessed_letter != '' :
+                    condition_strings.append("You have guessed it!")
+                    guessed_letters.append(guessed_letter)
+                elif guessed_letter != original_letter and guessed_letter != '':
                     user_profile.number_of_attempts_to_guess -= 1
-                    user_profile.save()
-                    condition_string = "No:("
-                    redirect_url = reverse('game_app:guessing_page', args=[category, pk])
-                    return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+                    condition_strings.append("No :(")
+                    missed_letters.append(guessed_letter)
 
+    # Update user_profile outside the loop
             user_profile.masked_word = ''.join(masked_word_list)
             user_profile.save()
 
+            # Decide the redirect URL based on the accumulated condition strings
+            if "You have guessed it!" in condition_strings and "No :(" in condition_strings:
+                condition_string = f"You got it right and wrong! The guessed letters are: {guessed_letters} and the missed letters are: {missed_letters} "
+            elif "You have guessed it!" in condition_strings:
+                condition_string = "You have guessed it!"
+            elif "No :(" in condition_strings:
+                condition_string = "No :("
+            else:
+                condition_string = "Unknown condition"
+
+    # Redirect with the final condition string
+            redirect_url = reverse('game_app:guessing_page', args=[category, pk])
+            return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
+
+# Redirect if the form is not valid or after the loop
         return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
 
 
