@@ -24,26 +24,34 @@
     </div>
 
 {% if condition_string %}
-    {% if condition_string == 'You have quessed it!' %}
-          <div class="alert alert-success" role="alert">{{ condition_string }} Зашифроване слово: <strong>{{ user.profile.masked_word }}</strong> </div>
+    {% if "Всі обрані літери правильні!" in condition_string %}
+          <div class="alert alert-success" role="alert">{{ condition_string }}.</strong> </div>
+    {% elif "Нажаль усі введені літери невірні" in condition_string %}
+          <div class="alert alert-danger" role="alert">{{ condition_string }}</strong> </div>
     {% else %}
-          <div class="alert alert-warning" role="alert">{{ condition_string }}Зашифроване слово: <strong>{{ user.profile.masked_word }}</strong> </div>
+          <div class="alert alert-warning" role="alert">{{ condition_string }}</strong> </div>
     {% endif %}
 {%else%}
 
-      <div class="well"> Зашифроване слово: <strong>{{ user.profile.masked_word }}</strong> . Зроби свій вибір</div>
+      <!-- <div class="well"> Зашифроване слово: <strong>{{ user.profile.masked_word }}</strong> . Зроби свій вибір</div> -->
       <!-- <div class="alert alert-info" role="alert"> Зроби свій вибір! </div> -->
 {% endif %}
 
     <br>
 
-    <form method="post">
+    <div class="text-center">
+    <form method="post" class="form-inline">
         {% csrf_token %}
-        {% for field in form %}
-            {{ field }}
-        {% endfor %}
-        <button type="submit">Submit Guess</button>
+        <div class="form-group">
+            {% for field in form %}
+                {{ field }}
+            {% endfor %}
+        </div>
+        <br>
+        <br>
+        <button type="submit" class="btn btn-primary mb-2">Submit</button>
     </form>
+</div>
 
 {% endif %}
 

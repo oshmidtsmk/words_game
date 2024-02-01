@@ -70,6 +70,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
         context['user_profile'] = self.request.user.profile
         context['condition_string'] = condition_string
 
+
         return context
 
     def post(self, request,category, pk, *args, **kwargs):
@@ -87,26 +88,27 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
             for index, (guessed_letter, original_letter) in enumerate(zip(form.cleaned_data.values(), word_obj.word)):
                 if guessed_letter == original_letter:
                     masked_word_list[index] = guessed_letter
-                    condition_strings.append("You have guessed it!")
+                    condition_strings.append("All is right")
                     guessed_letters.append(guessed_letter)
                 elif guessed_letter != original_letter and guessed_letter != '':
                     user_profile.number_of_attempts_to_guess -= 1
-                    condition_strings.append("No :(")
+                    condition_strings.append("No")
                     missed_letters.append(guessed_letter)
+
 
     # Update user_profile outside the loop
             user_profile.masked_word = ''.join(masked_word_list)
             user_profile.save()
 
             # Decide the redirect URL based on the accumulated condition strings
-            if "You have guessed it!" in condition_strings and "No :(" in condition_strings:
-                condition_string = f"You got it right and wrong! The guessed letters are: {guessed_letters} and the missed letters are: {missed_letters} "
-            elif "You have guessed it!" in condition_strings:
-                condition_string = "You have guessed it!"
-            elif "No :(" in condition_strings:
-                condition_string = "No :("
+            if "All is right" in condition_strings and "No" in condition_strings:
+                condition_string = f"Ці літери правильні: {guessed_letters}, а ось ці, нажаль,ні: {missed_letters}. За кожну невірну літеру знято 1 бал "
+            elif "All is right" in condition_strings:
+                condition_string = f"Всі обрані літери правильні! {guessed_letters}"
+            elif "No" in condition_strings:
+                condition_string = f"Нажаль усі введені літери невірні: {missed_letters}. За кожну невірну літеру знято 1 бал "
             else:
-                condition_string = "Unknown condition"
+                condition_string = "Зроби свій вибір, щеня!!!"
 
     # Redirect with the final condition string
             redirect_url = reverse('game_app:guessing_page', args=[category, pk])
