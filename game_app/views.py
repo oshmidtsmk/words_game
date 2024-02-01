@@ -157,8 +157,30 @@ def masking_word(request,category, pk):
     for index in obj.indices_to_hide:
         obj.chars[index] = "*"
 
+
+
+    masked_list = []
+
+
+    for letter,masked in zip(obj.word,obj.chars):
+        if letter == " ":
+            masked_letter = " "
+            masked_list.append(masked_letter)
+        if letter == "-":
+            masked_letter = "-"
+            masked_list.append(masked_letter)
+        else:
+            masked_letter = masked
+            masked_list.append(masked_letter)
+
+    print(masked_list)
+
+
     # Convert the list back to a string
-    obj.hidden_string = "".join(obj.chars)
+    #obj.hidden_string = "".join(obj.chars)
+    obj.hidden_string = "".join(masked_list)
+
+
 
     user.profile.masked_word = obj.hidden_string
     user.profile.save()
