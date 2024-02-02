@@ -100,6 +100,9 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
             user_profile.masked_word = ''.join(masked_word_list)
             user_profile.save()
 
+            guessed_letters = ", ".join(guessed_letters)
+            missed_letters = ", ".join(missed_letters)
+
             # Decide the redirect URL based on the accumulated condition strings
             if "All is right" in condition_strings and "No" in condition_strings:
                 condition_string = f"Ці літери правильні: {guessed_letters}, а ось ці, нажаль,ні: {missed_letters}. За кожну невірну літеру знято 1 бал "
@@ -158,28 +161,24 @@ def masking_word(request,category, pk):
         obj.chars[index] = "*"
 
 
-
     masked_list = []
-
 
     for letter,masked in zip(obj.word,obj.chars):
         if letter == " ":
             masked_letter = " "
             masked_list.append(masked_letter)
-        if letter == "-":
+        elif letter == "-":
             masked_letter = "-"
             masked_list.append(masked_letter)
         else:
             masked_letter = masked
             masked_list.append(masked_letter)
 
-    print(masked_list)
 
 
     # Convert the list back to a string
     #obj.hidden_string = "".join(obj.chars)
     obj.hidden_string = "".join(masked_list)
-
 
 
     user.profile.masked_word = obj.hidden_string
