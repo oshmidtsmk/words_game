@@ -90,6 +90,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                     masked_word_list[index] = guessed_letter
                     condition_strings.append("All is right")
                     guessed_letters.append(guessed_letter)
+
                 elif guessed_letter != original_letter and guessed_letter != '':
                     user_profile.number_of_attempts_to_guess -= 1
                     condition_strings.append("No")
@@ -99,6 +100,11 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
     # Update user_profile outside the loop
             user_profile.masked_word = ''.join(masked_word_list)
             user_profile.save()
+            if word_obj.word == user_profile.masked_word:
+                        guessed_word_instance = GuessedWords.objects.create(
+                            profile = user_profile,
+                            guessed_word = word_obj.word
+                        )
 
             guessed_letters = ", ".join(guessed_letters)
             missed_letters = ", ".join(missed_letters)
