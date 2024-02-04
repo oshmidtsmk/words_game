@@ -11,9 +11,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     number_of_attempts_to_guess = models.IntegerField(default=3)
     masked_word = models.CharField(max_length=100, blank=True, null=True)
-    #number_of_letter = models.IntegerField(null=True, blank=True)
     letter = models.CharField(max_length=1, blank=True, null=True)
-    #guessed_word = models.ForeignKey(GuessedWords, on_delete=models.CASCADE, blank=True, null=True)
 
 
     def __str__(self):
@@ -21,13 +19,11 @@ class Profile(models.Model):
 
 
 class GuessedWords(models.Model):
-    #word = models.CharField(max_length=100, blank=True, null=True)
     profile = models.ForeignKey(Profile,related_name="guessed_words", on_delete=models.CASCADE, blank=True, null=True)
     guessed_word = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.guessed_word
-
 
 
 class Word(models.Model):

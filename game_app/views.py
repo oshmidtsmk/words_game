@@ -1,16 +1,10 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.views.generic import TemplateView
 from django.views import generic
 from .models import Word, Profile, GuessedWords
 from django.contrib.auth.models import User
-#from .forms import LetterForm
 from .forms import GuessForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, get_object_or_404
-from django.http import Http404
 import random
 
 
@@ -60,16 +54,12 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        user_profile = self.request.user.profile
-        masked_word = user_profile.masked_word
-
+        masked_word = self.request.user.profile.masked_word
         condition_string = self.request.GET.get('condition_string', None)
-        context['form'] = GuessForm(masked_word)
-        context['masked_word'] = masked_word
-        context['user_profile'] = self.request.user.profile
-        context['condition_string'] = condition_string
 
+        context['user'] = self.request.user
+        context['form'] = GuessForm(masked_word)
+        context['condition_string'] = condition_string
 
         return context
 
@@ -127,14 +117,6 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
         return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
 
 
-
-
-        #     return redirect('success_page')  # Redirect to a success page or any other appropriate view
-        #
-        # return self.render_to_response(self.get_context_data(form=form))
-
-
-
 def new_game(request,category, pk):
     word_obj = Word.objects.get(pk=pk)
     profile_obj = request.user.profile
@@ -143,7 +125,7 @@ def new_game(request,category, pk):
     profile_obj.letter = None
     profile_obj.save()
 
-    #return HttpResponseRedirect(reverse('game_app:guessing_page', kwargs={'pk': word_obj.pk}))
+
     return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
 
 
@@ -157,7 +139,7 @@ def masking_word(request,category, pk):
     obj.chars = list(obj.word)
     length = len(obj.chars)
     # Determine the number of letters to hide (you can adjust this as needed)
-    num_letters_to_hide = int(length * 0.5)  # Hiding 30% of the letters
+    num_letters_to_hide = int(length * 0.5)  # Hiding 50% of the letters
 
     # Generate random indices to hide letters
     obj.indices_to_hide = random.sample(range(length), num_letters_to_hide)
@@ -180,12 +162,8 @@ def masking_word(request,category, pk):
             masked_letter = masked
             masked_list.append(masked_letter)
 
-
-
     # Convert the list back to a string
-    #obj.hidden_string = "".join(obj.chars)
     obj.hidden_string = "".join(masked_list)
-
 
     user.profile.masked_word = obj.hidden_string
     user.profile.save()

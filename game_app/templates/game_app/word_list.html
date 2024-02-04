@@ -6,8 +6,7 @@
 
     <div class="page-header">
   <h1> Отже, {{ user.username }} <small>Вибирай слово, яке хочеш розгадати. <h1>Категорія {{category}}</h1></small></h1>
-  <!-- <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div> -->
-  <!-- <small>Вибирай слово, яке хочеш розгадати</small> -->
+
 </div>
   <div class="alert alert-info" role="alert">Кількість спроб на відгадування: {{ user.profile.number_of_attempts_to_guess }} </div>
      <ul class="list-group">
@@ -20,9 +19,6 @@
        {% else %}
 
        <a href="{% url 'game_app:masking-word' category=word.category pk=word.pk %}" class="list-group-item">{{word.description}}</a>
-
-
-
 
       {% endif %}
       {% endfor %}
