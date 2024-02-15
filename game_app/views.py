@@ -22,6 +22,18 @@ class CategoryListView(generic.ListView):
         context['user'] = user
         return context
 
+
+# class UsersListView(generic.ListView):
+#     model = User
+#     template_name = 'game_app/users_list.html'
+#     context_object_name = 'people'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         user = self.request.user
+#         context['user'] = user
+#         return context
+
 class WordListView(generic.ListView):
     model = Word
     template_name = 'game_app/word_list.html'
@@ -70,21 +82,25 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
 
         form = GuessForm(user_profile.masked_word, request.POST)
 
+
         if form.is_valid():
+
             condition_strings = []  # List to store condition stringsґ
             guessed_letters = []
             missed_letters = []
 
             for index, (guessed_letter, original_letter) in enumerate(zip(form.cleaned_data.values(), word_obj.word)):
-                if guessed_letter == original_letter:
+
+                if guessed_letter.lower() == original_letter.lower():
                     masked_word_list[index] = guessed_letter
                     condition_strings.append("All is right")
-                    guessed_letters.append(guessed_letter)
+                    guessed_letters.append(guessed_letter.upper())
 
-                elif guessed_letter != original_letter and guessed_letter != '':
+                elif guessed_letter.lower() != original_letter.lower() and guessed_letter != '':
                     user_profile.number_of_attempts_to_guess -= 1
                     condition_strings.append("No")
-                    missed_letters.append(guessed_letter)
+                    missed_letters.append(guessed_letter.upper())
+
 
 
     # Update user_profile outside the loop
@@ -114,6 +130,7 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
             return HttpResponseRedirect(f"{redirect_url}?condition_string={condition_string}")
 
 # Redirect if the form is not valid or after the loop
+
         return HttpResponseRedirect(reverse('game_app:guessing_page', args=[category, pk]))
 
 
