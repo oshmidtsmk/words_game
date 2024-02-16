@@ -13,6 +13,6 @@ urlpatterns = [
     path('categories/<str:category>/', views.WordListView.as_view(), name='word_list'),
     path('categories/<str:category>/<int:pk>/', views.GuessingPage.as_view(), name='guessing_page'),
     path('categories/<str:category>/<int:pk>/new-game/', views.new_game, name='new-game'),
-    # path('users/', views.UsersListView.as_view(), name='users_list'),
+    path('players/', views.PlayersListView.as_view(), name='players_list'),
 
 ]

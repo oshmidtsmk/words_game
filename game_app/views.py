@@ -16,6 +16,10 @@ class CategoryListView(generic.ListView):
     context_object_name = 'categories'
     queryset = Word.objects.values('category').distinct() # to show only one the same category without duplicates.
 
+    # def get_queryset(self):
+    #     Word.objects.values('category').distinct() # to show only one the same category without duplicates.
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -23,16 +27,20 @@ class CategoryListView(generic.ListView):
         return context
 
 
-# class UsersListView(generic.ListView):
-#     model = User
-#     template_name = 'game_app/users_list.html'
-#     context_object_name = 'people'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         user = self.request.user
-#         context['user'] = user
-#         return context
+class PlayersListView(generic.ListView):
+    model = User
+    template_name = 'game_app/players_list.html'
+    context_object_name = 'players'
+
+    def get_queryset(self):
+        return User.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        context['user'] = user
+        return context
+
 
 class WordListView(generic.ListView):
     model = Word
@@ -40,14 +48,17 @@ class WordListView(generic.ListView):
     context_object_name = 'words'
 
     def get_queryset(self):
-        return Word.objects.filter(category=self.kwargs['category']) #this category is passed from html by click.
+        category = self.kwargs.get('category')  # Use get() to handle the case when 'category' is absent
+        if category:
+            return Word.objects.filter(category=category)
+        else:
+            return Word.objects.all()  # You can modify this to return an empty queryset or handle it as needed
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         context['user'] = user
-        context['category'] = self.kwargs['category']
-
+        context['category'] = self.kwargs.get('category', '')  # Provide a default value if 'category' is absent
         #here I am just making a list out of the queriset to work with it in html of words_list
         guessed_words = []
         for item in user.profile.guessed_words.all():
@@ -57,7 +68,6 @@ class WordListView(generic.ListView):
         context['guessed_words'] = guessed_words
 
         return context
-
 
 class GuessingPage(LoginRequiredMixin, generic.DetailView):
     model = Word
