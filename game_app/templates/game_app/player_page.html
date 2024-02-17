@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+
+    <div class="page-header">
+  <h1> Нижче слова, відгадані {{player.username}} </h1></small></h1>
+ {{player.profile.number_of_attempts_to_guess}}
+
+</div>
+{% for word in guessed_words%}
+ "Відгадане слово: {{word}} з категорії {word.category}"
+ <br>
+ {% endfor %}
+{% endblock %}

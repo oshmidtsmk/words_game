@@ -4,20 +4,17 @@
 <div class="container">
   <div class="row">
     <div class="page-header">
-  <h1> {{user.username}}Тут усі ігроки</h1>
+  <h1> {{user.username}}, Тут усі гравці: </h1>
 </div>
-
+    {% for player in players %}
      <ul class="list-group">
-       <!-- {% for person in people %}
 
-       {{person.username}}
-       <!-- <a href="{% url 'game_app:word_list' category=category.category %}" class="list-group-item">{{category.category}}</a> -->
+       <a href="{% url 'game_app:player_page'  pk=player.pk %}" class="list-group-item">{{player.username}}</a>
 
 
 
-      <!-- {% endfor %} -->
        </ul>
-
+       {% endfor %}
 
 </div>
 

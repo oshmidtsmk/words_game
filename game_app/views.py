@@ -41,6 +41,24 @@ class PlayersListView(generic.ListView):
         context['user'] = user
         return context
 
+class PlayerView(generic.DetailView):
+    model = User
+    template_name = 'game_app/player_page.html'  # Create an HTML template to display the group details
+    context_object_name = 'player'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        player = context[self.context_object_name]
+        guessed_words = []
+        for item in player.profile.guessed_words.all():
+            item = str(item)
+            guessed_words.append(item)
+
+        context['guessed_words'] = guessed_words
+
+        return context
+
+
 
 class WordListView(generic.ListView):
     model = Word
