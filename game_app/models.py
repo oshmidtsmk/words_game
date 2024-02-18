@@ -21,6 +21,7 @@ class Profile(models.Model):
 class GuessedWords(models.Model):
     profile = models.ForeignKey(Profile,related_name="guessed_words", on_delete=models.CASCADE, blank=True, null=True)
     guessed_word = models.CharField(max_length=255, blank=True, null=True)
+    guessed_category = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.guessed_word

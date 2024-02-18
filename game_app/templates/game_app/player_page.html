@@ -9,8 +9,9 @@
  {{player.profile.number_of_attempts_to_guess}}
 
 </div>
-{% for word in guessed_words%}
- "Відгадане слово: {{word}} з категорії {word.category}"
+{% for item in guessed_words%}
+ "Відгадане слово: {{item.0}} з категорії {{item.1}}"
  <br>
  {% endfor %}
+
 {% endblock %}

@@ -51,10 +51,14 @@ class PlayerView(generic.DetailView):
         player = context[self.context_object_name]
         guessed_words = []
         for item in player.profile.guessed_words.all():
-            item = str(item)
+            if item.guessed_category:
+                item = (str(item.guessed_word),str(item.guessed_category))
+            else:
+                item = (str(item.guessed_word), "без категорії")    
             guessed_words.append(item)
 
         context['guessed_words'] = guessed_words
+
 
         return context
 
@@ -137,7 +141,8 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
             if word_obj.word == user_profile.masked_word:
                         guessed_word_instance = GuessedWords.objects.create(
                             profile = user_profile,
-                            guessed_word = word_obj.word
+                            guessed_word = word_obj.word,
+                            guessed_category = word_obj.category
                         )
 
             guessed_letters = ", ".join(guessed_letters)
