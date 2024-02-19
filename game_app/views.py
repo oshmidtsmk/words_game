@@ -1,6 +1,7 @@
 from django.views import generic
 from .models import Word, Profile, GuessedWords
 from django.contrib.auth.models import User
+from django.db import models #is used for rating of players by bumber of guessed word in the players view. 
 from .forms import GuessForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -33,7 +34,8 @@ class PlayersListView(generic.ListView):
     context_object_name = 'players'
 
     def get_queryset(self):
-        return User.objects.all()
+        return User.objects.annotate(num_guessed_words=models.F('profile__number_of_guessed_words')).order_by('-num_guessed_words')
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
