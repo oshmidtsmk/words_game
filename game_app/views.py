@@ -54,7 +54,7 @@ class PlayerView(generic.DetailView):
             if item.guessed_category:
                 item = (str(item.guessed_word),str(item.guessed_category))
             else:
-                item = (str(item.guessed_word), "без категорії")    
+                item = (str(item.guessed_word), "без категорії")
             guessed_words.append(item)
 
         context['guessed_words'] = guessed_words
@@ -144,6 +144,8 @@ class GuessingPage(LoginRequiredMixin, generic.DetailView):
                             guessed_word = word_obj.word,
                             guessed_category = word_obj.category
                         )
+                        user_profile.number_of_guessed_words +=1
+                        user_profile.save()
 
             guessed_letters = ", ".join(guessed_letters)
             missed_letters = ", ".join(missed_letters)

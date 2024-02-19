@@ -12,6 +12,7 @@ class Profile(models.Model):
     number_of_attempts_to_guess = models.IntegerField(default=3)
     masked_word = models.CharField(max_length=100, blank=True, null=True)
     letter = models.CharField(max_length=1, blank=True, null=True)
+    number_of_guessed_words = models.IntegerField(default=0)
 
 
     def __str__(self):
