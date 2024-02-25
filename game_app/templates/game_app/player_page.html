@@ -5,21 +5,27 @@
   <div class="row">
 
     <div class="page-header">
-  <h1> Нижче слова, відгадані {{player.username}} </h1></small></h1>
- {{player.profile.number_of_attempts_to_guess}}
-
-{{guessed_words}}
+  <h1> Гравець: {{player.username}} </h1></small></h1>
 <br>
----<br>
+Кількість відгаданих слів: {{player.profile.number_of_guessed_words}}:
 
-{{statistics}}
+<br>
+{% for category, count in statistics.items %}
+    <li>{{ category }}: {{ count }}</li>
+{% endfor %}
 
+
+
+{% if player == user %}
 </div>
 {% for item in guessed_words%}
  "Відгадане слово: {{item.0}} з категорії {{item.1}}"
 
  <br>
  {% endfor %}
+
+ {% endif %}
+
 
 
 {% endblock %}

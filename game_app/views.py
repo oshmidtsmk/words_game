@@ -42,7 +42,7 @@ class PlayersListView(generic.ListView):
         context = super().get_context_data(**kwargs)
 
         user = self.request.user
-        
+
         context['user'] = user
         return context
 
@@ -68,6 +68,8 @@ class PlayerView(generic.DetailView):
             second_item = item[1]
             statistics[second_item] = statistics.get(second_item, 0) + 1
         context['statistics'] = statistics
+        user = self.request.user
+        context['user'] = user
 
         return context
 
