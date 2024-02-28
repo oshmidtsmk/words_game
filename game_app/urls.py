@@ -15,5 +15,6 @@ urlpatterns = [
     path('categories/<str:category>/<int:pk>/new-game/', views.new_game, name='new-game'),
     path('players/', views.PlayersListView.as_view(), name='players_list'),
     path('players/<int:pk>/', views.PlayerView.as_view(), name='player_page'),
+    path('players/<int:pk>/edit/', views.EditUserView.as_view(), name='edit_user'),
 
 ]

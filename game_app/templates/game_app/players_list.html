@@ -11,18 +11,24 @@
     {% for player in players %}
      <ul class="list-group">
 
-       <a href="{% url 'game_app:player_page'  pk=player.pk %}" class="list-group-item">{{player.username}}. Кількість відгаданих слів {{player.profile.number_of_guessed_words}}</a>
+
+
+       <a href="{% url 'game_app:player_page'  pk=player.pk %}" class="list-group-item">{{player.username}}. Кількість відгаданих слів   {{player.profile.number_of_guessed_words}}</a>
 
        {% with my_list=player.profile.guessed_words.all %}
            {% with statistics=my_list|group_by:'guessed_category' %}
                {% for category, count in statistics.items %}
-                   <li>{{ category }}: {{ count }}</li>
+               <ul  class="list-group" style="margin-left: 30px;">
+                   <li>{{ category }}: <span class="badge">{{count}}</span></li>
+
+
+                </ul>
                {% endfor %}
            {% endwith %}
        {% endwith %}
 
 
-              </ul>
+      </ul>
 
 
     {% endfor %}

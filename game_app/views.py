@@ -2,10 +2,13 @@ from django.views import generic
 from .models import Word, Profile, GuessedWords
 from django.contrib.auth.models import User
 from django.db import models #is used for rating of players by bumber of guessed word in the players view.
-from .forms import GuessForm
+from .forms import GuessForm, UserEditForm
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 import random
 
 
@@ -72,6 +75,21 @@ class PlayerView(generic.DetailView):
         context['user'] = user
 
         return context
+
+class EditUserView(LoginRequiredMixin, generic.UpdateView):
+    model = User
+    template_name = 'game_app/edit_user.html'
+    form_class = UserEditForm
+
+    
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        # Get the pk of the current user
+        pk = self.request.user.pk
+        return reverse_lazy('game_app:player_page', kwargs={'pk': pk})
+
 
 
 

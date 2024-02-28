@@ -1,5 +1,8 @@
 from django import forms
 from .models import Profile
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 class GuessForm(forms.Form):
     def __init__(self, masked_word, *args, **kwargs):
@@ -13,7 +16,7 @@ class GuessForm(forms.Form):
                 self.fields[field_name] = forms.CharField(max_length=1, required=False,
                 widget=forms.TextInput(attrs={'style': 'width: 40px; height:40px; text-align: center;'})
                 )
-            
+
 
             else:
                 self.fields[field_name] = forms.CharField(
@@ -21,3 +24,10 @@ class GuessForm(forms.Form):
                     required=False,
                     widget=forms.TextInput(attrs={'readonly': 'readonly', 'disabled': 'disabled', 'placeholder':letter, 'style': 'width: 40px; height:40px; text-align: center;'})
                 )
+
+
+class UserEditForm(UserChangeForm):
+    
+    class Meta:
+        model = get_user_model()
+        fields = ('username', 'email')
