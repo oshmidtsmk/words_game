@@ -91,7 +91,7 @@ AUTHENTICATION_BACKENDS = (
 
 #for FB
 SOCIAL_AUTH_FACEBOOK_KEY = '351321751168467'
-SOCIAL_AUTH_FACEBOOK_SECRET = '3f3c7c91a63f73bcfc0b7fd311d51993' 
+SOCIAL_AUTH_FACEBOOK_SECRET = '3f3c7c91a63f73bcfc0b7fd311d51993'
 
 DATABASES = {
     'default': {
@@ -138,7 +138,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/images/'
+
 STATICFILES_DIRS =  [BASE_DIR.joinpath("static")]
+MEDIA_ROOT =  BASE_DIR.joinpath("static/images")
+
+
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

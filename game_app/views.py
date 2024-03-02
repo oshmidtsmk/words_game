@@ -2,7 +2,7 @@ from django.views import generic
 from .models import Word, Profile, GuessedWords
 from django.contrib.auth.models import User
 from django.db import models #is used for rating of players by bumber of guessed word in the players view.
-from .forms import GuessForm, UserEditForm
+from .forms import GuessForm, UserEditForm, ProfileEditForm
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.http import HttpResponseRedirect
@@ -81,7 +81,7 @@ class EditUserView(LoginRequiredMixin, generic.UpdateView):
     template_name = 'game_app/edit_user.html'
     form_class = UserEditForm
 
-    
+
     def get_object(self, queryset=None):
         return self.request.user
 
@@ -90,7 +90,16 @@ class EditUserView(LoginRequiredMixin, generic.UpdateView):
         pk = self.request.user.pk
         return reverse_lazy('game_app:player_page', kwargs={'pk': pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile_form'] = ProfileEditForm(instance=self.request.user.profile)
+        return context
 
+    def form_valid(self, form):
+        profile_form = ProfileEditForm(self.request.POST, self.request.FILES, instance=self.request.user.profile)
+        if profile_form.is_valid():
+            profile_form.save()
+        return super().form_valid(form)
 
 
 class WordListView(generic.ListView):

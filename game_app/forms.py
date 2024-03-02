@@ -27,7 +27,12 @@ class GuessForm(forms.Form):
 
 
 class UserEditForm(UserChangeForm):
-    
+
     class Meta:
         model = get_user_model()
         fields = ('username', 'email')
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture']
