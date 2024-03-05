@@ -3,6 +3,7 @@ from .models import Profile
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.forms.widgets import FileInput ## for removing the checkbox in file upload
 
 class GuessForm(forms.Form):
     def __init__(self, masked_word, *args, **kwargs):
@@ -32,7 +33,9 @@ class UserEditForm(UserChangeForm):
         model = get_user_model()
         fields = ('username', 'email')
 
+
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_picture']
+    profile_picture = forms.ImageField(widget=FileInput) #for removing checkbox from file uload.

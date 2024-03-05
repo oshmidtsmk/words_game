@@ -8,11 +8,9 @@
     <div class="page-header">
   <h1> {{user.username}}, Тут рейтинг гравців: </h1>
 </div>
+<ol class="list-group">
+
     {% for player in players %}
-     <ul class="list-group">
-
-
-
 
        <a href="{% url 'game_app:player_page'  pk=player.pk %}" class="list-group-item">
             <li> {{player.username}}. Кількість відгаданих слів:<span class="badge">{{player.profile.number_of_guessed_words}}</span> </li>
@@ -32,10 +30,11 @@
        {% endwith %}
 
 
-      </ul>
+
 
 
     {% endfor %}
+    </ol>
 
 </div>
 

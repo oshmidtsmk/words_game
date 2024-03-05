@@ -8,6 +8,7 @@
         </div>
 
         <form method="post" enctype="multipart/form-data">
+          <div class=""form-group row">
             {% csrf_token %}
             {{ form.username.label_tag }} {{ form.username }}
             <br>

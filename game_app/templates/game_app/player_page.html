@@ -8,26 +8,33 @@
         <div class="page-header">
             <h1> Гравець: {{player.username}} </h1>
             <br>
-            Кількість відгаданих слів: {{player.profile.number_of_guessed_words}}:
+            <img src="{{ player.profile.profile_picture.url }}" alt="{{ player.username }}'s Profile Picture" class="img-thumbnail" style="max-width: 150px;">
+            <br>
+            Кількість відгаданих слів: <span class="badge">{{player.profile.number_of_guessed_words}}</span>:
             <br>
 
-            <img src="{{ player.profile.profile_picture.url }}" alt="{{ player.username }}'s Profile Picture" class="img-thumbnail" style="max-width: 150px;">
-            
-            <br>
             {% for category, count in statistics.items %}
                 <li>{{ category }}: {{ count }}</li>
             {% endfor %}
 
             {% if player == user %}
-                <a href="{% url 'game_app:edit_user' pk=player.pk %}" class="btn btn-primary">Edit Personal Details</a>
+              <br>
+                <a href="{% url 'game_app:edit_user' pk=player.pk %}" class="btn btn-primary"> Редагувати пофіль</a>
             {% endif %}
         </div>
 
         {% if player == user %}
+            {% if guessed_words %}
+            Відгадані слова:
+            <br>
+            <ul class="list-group">
             {% for item in guessed_words %}
-                "Відгадане слово: {{item.0}} з категорії {{item.1}}"
-                <br>
+                <li class="list-group-item list-group-item disabled ">{{item.0}} (категорія {{item.1}})</li>
+              
             {% endfor %}
+
+            </ul>
+            {% endif %}
         {% endif %}
     </div>
 </div>
