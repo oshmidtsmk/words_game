@@ -16,6 +16,7 @@ class Profile(models.Model):
     number_of_guessed_words = models.IntegerField(default=0)
     #profile_picture = models.ImageField(upload_to='profile_pics/', default='default_profile_pic.png')  #for avatar
     profile_picture = models.ImageField(null = True, default='default_profile_pic.png', blank = True)
+    
 
 
     def __str__(self):

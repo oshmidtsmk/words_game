@@ -47,6 +47,7 @@ class PlayersListView(generic.ListView):
         user = self.request.user
 
         context['user'] = user
+
         return context
 
 class PlayerView(generic.DetailView):
