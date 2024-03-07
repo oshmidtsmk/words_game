@@ -45,9 +45,17 @@ class PlayersListView(generic.ListView):
         context = super().get_context_data(**kwargs)
 
         user = self.request.user
-
         context['user'] = user
+        players = context[self.context_object_name]
+        players_list = list(players)
+        #print(f"printing players: {players_list}")
+        for index, player in enumerate(players_list):
+            if player == user:
+                print(player.username)
+                player.profile.rating = f"Ваше місце {index + 1} з {len(players_list)}"
+                player.profile.save()
 
+    
         return context
 
 class PlayerView(generic.DetailView):
