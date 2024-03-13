@@ -29,7 +29,8 @@ urlpatterns = [
     path('welcome/', views.TestPage.as_view(), name = 'test'),
     path('thanks/', views.ThanksPage.as_view(), name = 'thanks'),
     path('game/', include('game_app.urls', namespace = 'game')),
-    path('oauth/', include('social_django.urls', namespace='social')),  #FB
+    path('oauth/', include('social_django.urls', namespace='social')),  #FB auth_backends
+    #path("", include("allauth.urls")), #for Google Auth with django-allauth.
     # path('users/', views.UsersListView.as_view(), name='users_list'),
 
 ]

@@ -6,7 +6,7 @@
 <p>Відгадане слово {{word.word}}</p>
 <li><a href="{% url 'game_app:category_list' %}" class="btn btn-simple">Продовжити відгадування нових слів?</a></li>
 
-  {%elif user.profile.number_of_attempts_to_guess == 0 %}
+  {%elif user.profile.number_of_attempts_to_guess < 1 %}
     <h1>Це нажаль програш :(</h1>
     <a href="{% url 'game_app:new-game' category=word.category pk=word.pk %}">Нова гра?</a>
   {%else%}

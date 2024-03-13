@@ -13,10 +13,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TAMPLATE_DIR =  BASE_DIR.joinpath("templates")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -45,7 +48,9 @@ INSTALLED_APPS = [
     'game_app',
     # for FB:
     'social_django',
+
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,7 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',  # FB
+    'social_django.middleware.SocialAuthExceptionMiddleware',  # Social Auth
+
 ]
 
 ROOT_URLCONF = 'words_play.urls'
@@ -71,8 +77,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',  #FB
-                'social_django.context_processors.login_redirect', #FB
+                'social_django.context_processors.backends',  #For Social auth
+                'social_django.context_processors.login_redirect', # For Social auth
             ],
         },
     },
@@ -82,16 +88,25 @@ WSGI_APPLICATION = 'words_play.wsgi.application'
 
 #for FB
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.facebook.FacebookOAuth2',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    # 'social_core.backends.facebook.FacebookOAuth2',
+    # 'social_core.backends.twitter.TwitterOAuth',
+    # 'social_core.backends.github.GithubOAuth2',
 
     'django.contrib.auth.backends.ModelBackend',
+
+
 )
+
+
+
 
 #for FB
 SOCIAL_AUTH_FACEBOOK_KEY = '351321751168467'
 SOCIAL_AUTH_FACEBOOK_SECRET = '3f3c7c91a63f73bcfc0b7fd311d51993'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1011099681160-pdrp2oc1l6i5ves165k324lmrtbd1jpb.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 DATABASES = {
     'default': {
@@ -144,6 +159,18 @@ STATICFILES_DIRS =  [BASE_DIR.joinpath("static")]
 MEDIA_ROOT =  BASE_DIR.joinpath("static/images")
 #STATIC_ROOT =  BASE_DIR.joinpath("static")
 
+LANGUAGES = [
+    ('en', _('English')),
+    ('uk', _('Ukrainian')),
+    # Add more languages if needed
+]
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale'),
+]
+
+# Set the default language
+LANGUAGE_CODE = 'uk'  # Change to 'en' for EN. Uk is for Ukranian
 
 
 LOGIN_URL = 'login'

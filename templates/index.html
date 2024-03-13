@@ -16,7 +16,9 @@
   <h1>Привіт, ерудите!</h1>
   <p>На цьому сайті ти можеш попрактикуватися у відгадуванні слів!</p>
   <p>Будь ласка авторизуйся, це займе хвилину</p>
-  <a class="btn btn-primary btn-lg" href="{% url 'accounts:login' %}" role="button">Авторизуватись</a> або
+
+  <a class="btn btn-primary btn-lg" href="{% url 'social:begin' 'google-oauth2' %}" role="button">Авторизуватись через Google</a> або
+  <a class="btn btn-primary btn-lg" href="{% url 'accounts:login' %}" role="button">Авторизуватись(якщо реєструвались)</a> або
   <a class="btn btn-primary btn-lg" href="{% url 'accounts:signup' %}" role="button">Зареєструватись</a>
 </div>
 

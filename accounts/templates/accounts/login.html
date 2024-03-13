@@ -1,6 +1,7 @@
 <!-- words_play -->
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load i18n %}
 
 {% block content %}
 <div class="container">
@@ -9,7 +10,10 @@
 
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input type="submit" value="Login" class="btn btn-default">
+         <input type="submit" value="{% trans 'Login' %}" class="btn btn-default">
+
+
+
     </form>
 
 

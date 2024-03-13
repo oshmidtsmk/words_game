@@ -12,4 +12,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name = 'logout'),# it goes to homepahe
     path('signup/', views.SignUp.as_view(), name = 'signup'),
     #path('oauth/', include('social_django.urls', namespace='social')),  #FB
+
 ]
