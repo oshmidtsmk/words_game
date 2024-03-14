@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'words_play.wsgi.application'
 #for FB
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
-    # 'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     # 'social_core.backends.twitter.TwitterOAuth',
     # 'social_core.backends.github.GithubOAuth2',
 
@@ -102,8 +102,8 @@ AUTHENTICATION_BACKENDS = (
 
 
 #for FB
-SOCIAL_AUTH_FACEBOOK_KEY = '351321751168467'
-SOCIAL_AUTH_FACEBOOK_SECRET = '3f3c7c91a63f73bcfc0b7fd311d51993'
+SOCIAL_AUTH_FACEBOOK_KEY = '646418174217619'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'f959ed290bc5218c55dc5f10a0ef306d'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1011099681160-pdrp2oc1l6i5ves165k324lmrtbd1jpb.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
