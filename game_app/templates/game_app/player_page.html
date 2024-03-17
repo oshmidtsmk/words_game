@@ -8,7 +8,7 @@
         <div class="page-header">
             <h1> Гравець: {{player.username}} </h1>
         </div>
-        <div class="alert alert-info" role="alert">{{ user.profile.rating}} </div>
+        <div class="alert alert-info" role="alert">{{ player.profile.rating}} </div>
         <img src="{{ player.profile.profile_picture.url }}" alt="{{ player.username }}'s Profile Picture" class="img-thumbnail" style="max-width: 150px;">
         <br>
         Кількість відгаданих слів: <span class="badge">{{player.profile.number_of_guessed_words}}</span>:

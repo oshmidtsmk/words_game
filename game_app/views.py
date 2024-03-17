@@ -10,6 +10,9 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 import random
+from django.core.exceptions import ObjectDoesNotExist
+
+
 
 
 # Create your views here.
@@ -49,13 +52,17 @@ class PlayersListView(generic.ListView):
         players = context[self.context_object_name]
         players_list = list(players)
         #print(f"printing players: {players_list}")
+        #this has potential performance issue
         for index, player in enumerate(players_list):
-            if player == user:
-                print(player.username)
+            try:
                 player.profile.rating = f"Ваше місце {index + 1} з {len(players_list)}"
                 player.profile.save()
+            except ObjectDoesNotExist:
+                pass
 
-    
+
+
+
         return context
 
 class PlayerView(generic.DetailView):
