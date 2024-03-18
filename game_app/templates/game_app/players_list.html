@@ -9,7 +9,7 @@
   <h1> {{user.username}}, Тут рейтинг гравців: </h1>
 
 </div>
-<div class="alert alert-info" role="alert">{{ user.profile.rating}} </div>
+<div class="alert alert-info" role="alert">  Ваше місце {{ user.profile.rating}} з {{players_number}} </div>
 <ol class="list-group">
 
     {% for player in players %}

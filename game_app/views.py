@@ -10,7 +10,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 import random
-from django.core.exceptions import ObjectDoesNotExist
+
 
 
 
@@ -50,15 +50,21 @@ class PlayersListView(generic.ListView):
         user = self.request.user
         context['user'] = user
         players = context[self.context_object_name]
+
+        #players_with_profile = User.objects.filter(profile__isnull=False)
+
         players_list = list(players)
-        #print(f"printing players: {players_list}")
-        #this has potential performance issue
+        for item in players_list:
+            if item.username == "Oleh_admin":
+                players_list.remove(item)
+        context['players_number'] = len(players_list)
+
+
         for index, player in enumerate(players_list):
-            try:
-                player.profile.rating = f"Ваше місце {index + 1} з {len(players_list)}"
-                player.profile.save()
-            except ObjectDoesNotExist:
-                pass
+
+            #player.profile.rating = f"Ваше місце {index + 1} з {len(players_list)}"
+            player.profile.rating = index + 1
+            player.profile.save()
 
 
 
@@ -72,6 +78,11 @@ class PlayerView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        #for rating:
+        players_with_profile = User.objects.filter(profile__isnull=False)
+        context['players_number'] = len(players_with_profile)
+
         player = context[self.context_object_name]
         guessed_words = []
         for item in player.profile.guessed_words.all():
