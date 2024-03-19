@@ -51,18 +51,11 @@ class PlayersListView(generic.ListView):
         context['user'] = user
         players = context[self.context_object_name]
 
-        #players_with_profile = User.objects.filter(profile__isnull=False)
 
-        players_list = list(players)
-        for item in players_list:
-            if item.username == "Oleh_admin":
-                players_list.remove(item)
-        context['players_number'] = len(players_list)
+        players_with_profile = list(User.objects.filter(profile__isnull=False).order_by('-profile__number_of_guessed_words'))
+        context['players_number'] = len(players_with_profile)
 
-
-        for index, player in enumerate(players_list):
-
-            #player.profile.rating = f"Ваше місце {index + 1} з {len(players_list)}"
+        for index, player in enumerate(players_with_profile):
             player.profile.rating = index + 1
             player.profile.save()
 
