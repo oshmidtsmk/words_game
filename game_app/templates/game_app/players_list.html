@@ -12,6 +12,9 @@
 <div class="alert alert-info" role="alert">  Ваше місце {{ user.profile.rating}} з {{players_number}} </div>
 <ol class="list-group">
 
+<img src="{{bar_chart_path}}" alt="Description of the Image">
+
+
     {% for player in players %}
         {% if player.profile %}
        <a href="{% url 'game_app:player_page'  pk=player.pk %}" class="list-group-item">

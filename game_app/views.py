@@ -11,6 +11,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 import random
 
+#for plotting
+import matplotlib
+matplotlib.use('Agg')  # Set the backend to Agg
+import matplotlib.pyplot as plt
+from django.conf import settings
+import os
+
 
 
 
@@ -49,8 +56,6 @@ class PlayersListView(generic.ListView):
 
         user = self.request.user
         context['user'] = user
-        players = context[self.context_object_name]
-
 
         players_with_profile = list(User.objects.filter(profile__isnull=False).order_by('-profile__number_of_guessed_words'))
         context['players_number'] = len(players_with_profile)
@@ -59,10 +64,32 @@ class PlayersListView(generic.ListView):
             player.profile.rating = index + 1
             player.profile.save()
 
+        #for Graph:
+        # Extracting player names and number of guessed words
+        player_names = [player.username for player in players_with_profile]
+        num_guessed_words = [player.profile.number_of_guessed_words for player in players_with_profile]
 
+        # Plotting the bar chart
+        plt.figure(figsize=(10, 6))
+        plt.barh(player_names, num_guessed_words, color='skyblue')
+        plt.xlabel('Кількість відгаданих слів')
+        plt.ylabel('Гравці')
+        plt.title('Рейтинг чемпіонів')
+        plt.gca().invert_yaxis()  # Invert y-axis to show highest at the top
+        plt.tight_layout()
+
+        # Saving the plot to a temporary file
+        media_path = os.path.join(settings.MEDIA_ROOT, 'bar_chart.png')
+        plt.savefig(media_path)
+        plt.close()
+
+        # Passing the path of the saved plot to the template
+        context['bar_chart_path'] = os.path.join(settings.MEDIA_URL, 'bar_chart.png')
 
 
         return context
+
+
 
 class PlayerView(generic.DetailView):
     model = User
