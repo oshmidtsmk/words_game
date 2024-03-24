@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+
+
+<div class="container">
+  <div class="row">
+    <div class="page-header">
+  <h1> {{user.username}}, Тут рейтинг гравців: </h1>
+
+</div>
+<div class="alert alert-info" role="alert">  Ваше місце {{ user.profile.rating}} з {{players_number}} </div>
+<ol class="list-group">
+
+<img src="{{bar_chart_path}}" alt="Description of the Image">
+
+
+    {% for player in players %}
+        {% if player.profile %}
+       <a href="{% url 'game_app:player_page'  pk=player.pk %}" class="list-group-item">
+            <li> {{player.username}}. Кількість відгаданих слів:<span class="badge">{{player.profile.number_of_guessed_words}}</span> </li>
+        </a>
+
+
+       {% with my_list=player.profile.guessed_words.all %}
+           {% with statistics=my_list|group_by:'guessed_category' %}
+               {% for category, count in statistics.items %}
+               <ul  class="list-group" style="margin-left: 30px;">
+                   <li>{{ category }}: {{count}}</li>
+
+
+                </ul>
+               {% endfor %}
+           {% endwith %}
+       {% endwith %}
+
+
+
+       {%endif%}
+
+    {% endfor %}
+    </ol>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const playerLinks = document.querySelectorAll('.player-link');
+        const playerChart = document.getElementById('player-chart');
+
+        playerLinks.forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const playerId = this.dataset.playerId;
+                const playerPageUrl = '{{ player_page_url }}'.replace('0', playerId);
+                window.location.href = playerPageUrl;
+            });
+        });
+    });
+</script>
+
+{% endblock %}

@@ -11,18 +11,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 import random
 
-#for plotting with matplotlib
-# import matplotlib
-# matplotlib.use('Agg')  # Set the backend to Agg
-# import matplotlib.pyplot as plt
-# from django.conf import settings
-# import os
-
-#for plotting with plotly
-from plotly.offline import plot
-import plotly.express as px
-import os
+#for plotting
+import matplotlib
+matplotlib.use('Agg')  # Set the backend to Agg
+import matplotlib.pyplot as plt
 from django.conf import settings
+import os
 
 
 
@@ -53,8 +47,9 @@ class PlayersListView(generic.ListView):
     context_object_name = 'players'
 
     def get_queryset(self):
-        # Show descending number of guessed words
+        #showind descending number of guessed words
         return User.objects.annotate(num_guessed_words=models.F('profile__number_of_guessed_words')).order_by('-num_guessed_words')
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,28 +64,30 @@ class PlayersListView(generic.ListView):
             player.profile.rating = index + 1
             player.profile.save()
 
-        # Extracting player names, IDs, and number of guessed words
+        #for Graph:
+        # Extracting player names and number of guessed words
         player_names = [player.username for player in players_with_profile]
-        player_ids = [player.id for player in players_with_profile]
         num_guessed_words = [player.profile.number_of_guessed_words for player in players_with_profile]
 
-        # Create an interactive bar chart using Plotly
-        fig = px.bar(x=player_names, y=num_guessed_words, color=num_guessed_words,
-                     labels={'x': 'Гравці', 'y': 'Кількість відгаданих слів'},
-                     title='Рейтинг чемпіонів', template='plotly_white',
-                     custom_data=[player_ids])
+        # Plotting the bar chart
+        plt.figure(figsize=(10, 6))
+        plt.barh(player_names, num_guessed_words, color='skyblue')
+        plt.xlabel('Кількість відгаданих слів')
+        plt.ylabel('Гравці')
+        plt.title('Рейтинг чемпіонів')
+        plt.gca().invert_yaxis()  # Invert y-axis to show highest at the top
+        plt.tight_layout()
 
-        # Update hover template to display player name and ID
-        fig.update_traces(hovertemplate='<b>%{x}</b><br>ID: %{customdata[0]}<br>Кількість відгаданих слів: %{y}')
+        # Saving the plot to a temporary file
+        media_path = os.path.join(settings.MEDIA_ROOT, 'bar_chart.png')
+        plt.savefig(media_path)
+        plt.close()
 
-        # Save the Plotly chart as an HTML file
-        chart_html = fig.to_html()
+        # Passing the path of the saved plot to the template
+        context['bar_chart_path'] = os.path.join(settings.MEDIA_URL, 'bar_chart.png')
 
-        # Pass player IDs to the context
-        context['chart_html'] = chart_html
 
         return context
-
 
 
 

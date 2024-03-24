@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" href="{% static 'words_play/css/master.css'%}">
     <link rel="stylesheet" type="text/css" href="{% static 'words_play/css/master.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
   </head>
@@ -64,15 +65,10 @@
           {% endblock %}
 
         </div>
+    {% block extra_scripts %}
 
-
-
-          <!-- <canvas id="canvas"></canvas> -->
-
+    {% endblock %}
 
 
   </body>
-
-  <!-- <script type="text/javascript" src="{% static 'simple_social/js/master.js' %}" ></script> -->
-
 </html>
