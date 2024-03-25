@@ -2,12 +2,46 @@
 {% load custom_filters %}
 {% block content %}
 
-<h1>Players List</h1>
+<h1>Рейтинг чемпіонів</h1>
 <div>
+  <div class="alert alert-info" role="alert"> Шановний, {{user.username}}, твоє місце {{ user.profile.rating}} з {{players_number}} </div>
     <!-- Display the Plotly chart -->
     {{ chart_html|safe }}
 </div>
 
+<div class="Lis of players">
+  <h2>Список</h2>
+
+
+<ol class="list-group">
+
+
+    {% for player in players %}
+        {% if player.profile %}
+       <a href="{% url 'game_app:player_page'  pk=player.pk %}" class="list-group-item">
+            <li> {{player.username}}. Кількість відгаданих слів:<span class="badge">{{player.profile.number_of_guessed_words}}</span> </li>
+        </a>
+
+
+       {% with my_list=player.profile.guessed_words.all %}
+           {% with statistics=my_list|group_by:'guessed_category' %}
+               {% for category, count in statistics.items %}
+               <ul  class="list-group" style="margin-left: 30px;">
+                   <li>{{ category }}: {{count}}</li>
+
+
+                </ul>
+               {% endfor %}
+           {% endwith %}
+       {% endwith %}
+
+
+
+       {%endif%}
+
+    {% endfor %}
+    </ol>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}

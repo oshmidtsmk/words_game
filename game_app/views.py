@@ -11,12 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 import random
 
-#for plotting with matplotlib
-# import matplotlib
-# matplotlib.use('Agg')  # Set the backend to Agg
-# import matplotlib.pyplot as plt
-# from django.conf import settings
-# import os
+
 
 #for plotting with plotly
 from plotly.offline import plot
@@ -72,17 +67,24 @@ class PlayersListView(generic.ListView):
         # Extracting player names, IDs, and number of guessed words
         player_names = [player.username for player in players_with_profile]
         player_ids = [player.id for player in players_with_profile]
+        player_ratings = [player.profile.rating for player in players_with_profile]
         num_guessed_words = [player.profile.number_of_guessed_words for player in players_with_profile]
 
         # Create an interactive bar chart using Plotly
         fig = px.bar(x=player_names, y=num_guessed_words, color=num_guessed_words,
                      labels={'x': 'Гравці', 'y': 'Кількість відгаданих слів'},
-                     title='Рейтинг чемпіонів', template='plotly_white',
-                     custom_data=[player_ids])
+                     title='Діаграма', template='plotly_white',
+                     custom_data=[player_ids, player_ratings])
 
         # Update hover template to display player name and ID
-        fig.update_traces(hovertemplate='<b>%{x}</b><br>ID: %{customdata[0]}<br>Кількість відгаданих слів: %{y}')
-
+        fig.update_layout(title={
+    'text': 'Діаграма',
+    'font': {'size': 24, 'family': 'Arial', 'color': 'black'},
+    'x': 0.5,  # Center align the title
+    'y': 0.95,  # Adjust the position of the title
+    'xanchor': 'center',
+    'yanchor': 'top'
+})
         # Save the Plotly chart as an HTML file
         chart_html = fig.to_html()
 
